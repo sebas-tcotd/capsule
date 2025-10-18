@@ -1,14 +1,6 @@
-# Turborepo starter
+# Capsule
 
-This Turborepo starter is maintained by the Turborepo core team.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
+A modern monorepo built with Turborepo, TypeScript, and Next.js.
 
 ## What's inside?
 
@@ -16,120 +8,198 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@capsule/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@capsule/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@capsule/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `web`: a [Next.js](https://nextjs.org/) app
+- `@capsule/ui`: a React component library shared across applications
+- `@capsule/eslint-config`: ESLint configurations (includes Next.js, React, and Prettier integration)
+- `@capsule/typescript-config`: Shared `tsconfig.json` files used throughout the monorepo
+- `@capsule/domain`: Domain logic and business rules
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/) with strict mode enabled.
 
-### Utilities
+### Tech Stack
 
-This Turborepo has some additional tools already setup for you:
+- **[TypeScript](https://www.typescriptlang.org/)** - Static type checking (strict mode)
+- **[ESLint](https://eslint.org/)** - Code linting
+- **[Prettier](https://prettier.io)** - Code formatting
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks
+- **[lint-staged](https://github.com/okonet/lint-staged)** - Run linters on staged files
+- **[commitlint](https://commitlint.js.org/)** - Enforce conventional commits
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Turborepo](https://turbo.build/repo)** - Monorepo build system
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## Getting Started
 
-### Build
+### Prerequisites
 
-To build all apps and packages, run the following command:
+- Node.js >= 18
+- pnpm 9.0.0
 
-```
-cd my-turborepo
+### Installation
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+```bash
+# Install dependencies
+pnpm install
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+# Start development server
+pnpm dev
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+# Build all apps and packages
+pnpm build
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+# Run linting
+pnpm lint
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+# Run type checking
+pnpm check-types
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# Format code
+pnpm format
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Development Workflow
+
+This project follows **GitHub Flow** for branch management:
+
+### Branching Strategy
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+main (protected branch - always deployable)
+  ↑
+  └── feat/feature-name      # New features
+  └── fix/bug-description    # Bug fixes
+  └── chore/task-name        # Maintenance tasks
+  └── refactor/description   # Code refactoring
+  └── docs/description       # Documentation updates
 ```
 
-### Remote Caching
+### Branch Naming Convention
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+- `feat/description` - New features or enhancements
+- `fix/description` - Bug fixes
+- `chore/description` - Maintenance tasks (deps, configs, etc.)
+- `refactor/description` - Code refactoring without functionality changes
+- `docs/description` - Documentation updates
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Workflow Steps
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+1. **Create a feature branch from `main`**
+
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b feat/your-feature-name
+   ```
+
+2. **Make your changes and commit**
+   - Commits must follow [Conventional Commits](https://www.conventionalcommits.org/)
+   - Examples: `feat: add user authentication`, `fix: resolve login bug`
+   - commitlint will validate your commit messages
+
+3. **Push your branch**
+
+   ```bash
+   git push -u origin feat/your-feature-name
+   ```
+
+4. **Open a Pull Request**
+   - Go to GitHub and create a PR to `main`
+   - CI will automatically run (lint, type-check, format-check)
+   - All checks must pass before merging
+
+5. **Merge to main**
+   - Merge the PR once approved and all checks pass
+   - Delete the feature branch after merging
+
+### Commit Message Format
+
+We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-cd my-turborepo
+<type>(<scope>): <subject>
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+Types:
+  feat:     New feature
+  fix:      Bug fix
+  docs:     Documentation changes
+  style:    Code style changes (formatting, etc.)
+  refactor: Code refactoring
+  test:     Adding or updating tests
+  chore:    Maintenance tasks
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+**Examples:**
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+git commit -m "feat: add user profile page"
+git commit -m "fix: resolve navigation bug on mobile"
+git commit -m "chore: update dependencies"
 ```
 
-## Useful Links
+## Branch Protection
 
-Learn more about the power of Turborepo:
+The `main` branch is protected with the following rules:
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- ✅ Requires pull request before merging
+- ✅ Requires status checks to pass (CI must pass)
+- ✅ Requires branches to be up to date before merging
+- ❌ No direct pushes to `main`
+
+## CI/CD
+
+GitHub Actions automatically runs on every push and pull request:
+
+- **Lint**: ESLint validation across all workspaces
+- **Type Check**: TypeScript type validation
+- **Format Check**: Prettier format validation
+
+See `.github/workflows/ci.yml` for configuration.
+
+## Pre-commit Hooks
+
+Husky runs automatically before each commit:
+
+- **lint-staged**: Formats staged files with Prettier
+- **commitlint**: Validates commit message format
+
+## Project Structure
+
+```
+capsule/
+├── apps/
+│   └── web/              # Next.js application
+├── packages/
+│   ├── ui/               # Shared React components
+│   ├── domain/           # Business logic
+│   ├── eslint-config/    # Shared ESLint configs
+│   └── typescript-config/# Shared TypeScript configs
+├── .github/
+│   └── workflows/        # GitHub Actions workflows
+└── turbo.json           # Turborepo configuration
+```
+
+## Useful Commands
+
+```bash
+# Development
+pnpm dev                 # Start all apps in dev mode
+pnpm dev --filter=web    # Start only web app
+
+# Building
+pnpm build               # Build all apps and packages
+pnpm build --filter=web  # Build only web app
+
+# Code Quality
+pnpm lint                # Run ESLint
+pnpm check-types         # Run TypeScript compiler
+pnpm format              # Format all files with Prettier
+
+# Git Hooks
+pnpm prepare             # Install Husky hooks
+```
+
+## Learn More
+
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Conventional Commits](https://www.conventionalcommits.org/)
