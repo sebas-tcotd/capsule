@@ -1,8 +1,18 @@
-@import "tailwindcss";
+/**
+ * Capsule - Global Styles
+ *
+ * Imports Capsule design system tokens
+ */
 
+@import "tailwindcss";
+@import "@capsule/ui/styles/tokens.css";
+
+/* Root variables for theming */
 :root {
-  --background: #ffffff;
+  --background: #FAFAFA;
   --foreground: #171717;
+  --font-inter-sans: Inter, system-ui, -apple-system, sans-serif;
+  --font-inter-mono: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 @theme inline {
@@ -12,6 +22,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode (for future implementation) */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -22,5 +33,4 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
