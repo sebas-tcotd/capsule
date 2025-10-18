@@ -36,3 +36,11 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Docker
+docker/postgres/data
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
