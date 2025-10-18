@@ -26,6 +26,8 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/) with stri
 - **[commitlint](https://commitlint.js.org/)** - Enforce conventional commits
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 - **[Turborepo](https://turbo.build/repo)** - Monorepo build system
+- **[PostgreSQL](https://www.postgresql.org/)** - Production-ready database
+- **[Docker](https://www.docker.com/)** - Containerization for development and deployment
 
 ## Getting Started
 
@@ -33,8 +35,9 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/) with stri
 
 - Node.js >= 18
 - pnpm 9.0.0
+- Docker & Docker Compose (for database and containerized development)
 
-### Installation
+### Local Development (without Docker)
 
 ```bash
 # Install dependencies
@@ -55,6 +58,132 @@ pnpm check-types
 # Format code
 pnpm format
 ```
+
+### Docker Development Setup (Recommended)
+
+Docker provides an isolated development environment with PostgreSQL database.
+
+#### Quick Start
+
+```bash
+# 1. Copy environment variables
+cp .env.example .env
+
+# 2. Start all services (database + app)
+docker compose up -d
+
+# 3. View logs
+docker compose logs -f web
+
+# 4. Stop all services
+docker compose down
+```
+
+#### Available Services
+
+- **web**: Next.js application (http://localhost:3000)
+- **postgres**: PostgreSQL database (localhost:5432)
+- **pgadmin**: Database management UI (http://localhost:5050) - Optional
+
+#### Start pgAdmin (Database UI)
+
+```bash
+# Start with pgadmin
+docker compose --profile tools up -d
+
+# Access pgAdmin at http://localhost:5050
+# Email: admin@capsule.local
+# Password: admin
+```
+
+#### Useful Docker Commands
+
+```bash
+# Start services
+docker compose up -d              # Start in background
+docker compose up                 # Start with logs
+
+# Stop services
+docker compose down               # Stop and remove containers
+docker compose down -v            # Stop and remove volumes (deletes database data)
+
+# View logs
+docker compose logs -f            # Follow all logs
+docker compose logs -f web        # Follow web app logs
+docker compose logs -f postgres   # Follow database logs
+
+# Restart a service
+docker compose restart web
+docker compose restart postgres
+
+# Execute commands inside containers
+docker compose exec web pnpm lint           # Run lint inside container
+docker compose exec postgres psql -U capsule -d capsule_dev  # Access database CLI
+
+# Rebuild containers
+docker compose build              # Rebuild all
+docker compose build web          # Rebuild web only
+docker compose up -d --build      # Rebuild and start
+```
+
+#### Database Access
+
+**Connection String:**
+
+```
+postgresql://capsule:capsule_dev_password@localhost:5432/capsule_dev
+```
+
+**Using psql CLI:**
+
+```bash
+docker compose exec postgres psql -U capsule -d capsule_dev
+```
+
+**Using pgAdmin:**
+
+1. Start pgAdmin: `docker compose --profile tools up -d`
+2. Open http://localhost:5050
+3. Login with credentials from `.env`
+4. Add server:
+   - Host: `postgres`
+   - Port: `5432`
+   - Database: `capsule_dev`
+   - Username: `capsule`
+   - Password: `capsule_dev_password`
+
+#### Environment Variables
+
+This project uses [Dotenv Vault](https://www.dotenv.org/docs/security/env-vault) for secure environment variable management.
+
+**For team members with vault access:**
+
+```bash
+# Login to dotenv vault
+npx dotenv-vault login
+
+# Pull environment variables
+npx dotenv-vault pull
+```
+
+**For local development without vault:**
+
+```bash
+# Copy example file
+cp .env.example .env
+
+# Edit .env with your local values
+```
+
+**Key variables:**
+
+- `POSTGRES_USER`: Database user
+- `POSTGRES_PASSWORD`: Database password
+- `POSTGRES_DB`: Database name
+- `DATABASE_URL`: Full connection string
+- `WEB_PORT`: Port for web application
+
+**Note:** The `.env.vault` file is encrypted and safe to commit to Git. Your local `.env` file is gitignored.
 
 ## Development Workflow
 
