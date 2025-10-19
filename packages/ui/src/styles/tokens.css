@@ -1,8 +1,10 @@
 /**
  * Capsule UI - Design Tokens
  *
- * Re-exports the shared Tailwind configuration from @capsule/tailwind-config
- * This ensures a single source of truth for design tokens across the monorepo.
+ * This file is kept for reference but not used directly.
+ * Design tokens are defined in @capsule/tailwind-config/tailwind.config.js
+ * and consumed via Tailwind CSS classes.
+ *
+ * Apps that use @capsule/ui should import the base styles:
+ * @import "@capsule/tailwind-config/base.css";
  */
-
-@import "@capsule/tailwind-config";

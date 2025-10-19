@@ -1,12 +1,13 @@
 # @capsule/tailwind-config
 
-Configuración compartida de Tailwind CSS v4 para el design system Capsule.
+Configuración compartida de Tailwind CSS v3 para el design system Capsule.
 
 ## 📦 Contenido
 
 - **Design Tokens**: Colores, tipografía, espaciado, radius, sombras
-- **Base Styles**: Estilos globales para elementos HTML
+- **Base Styles**: Estilos globales para elementos HTML (base.css)
 - **Utility Classes**: Clases de utilidad personalizadas
+- **Tailwind Config**: Configuración extendible (tailwind.config.js)
 
 ## 🎨 Design Tokens
 
@@ -20,46 +21,117 @@ Configuración compartida de Tailwind CSS v4 para el design system Capsule.
 ### Tipografía
 
 - **Font Family**: Inter (sans), JetBrains Mono (mono)
-- **Escala**: Perfect Fourth (1.333 ratio)
+- **Font Sizes**: xs, sm, base, lg, xl, 2xl-7xl con line heights optimizados
 
 ### Spacing
 
-- **Base Grid**: 8px
+- **Base Grid**: 8px (usando valores por defecto de Tailwind)
 - **Densidad**: Balanced-Spacious
 
 ### Radius
 
-- **Default**: 8px (moderately rounded)
+- **Escala**: sm (0.375rem), DEFAULT (0.5rem), md, lg, xl, 2xl, 3xl, full
+
+### Shadows
+
+- **Escala**: sm, DEFAULT, md, lg, xl, 2xl con opacidades sutiles
 
 ## 📖 Uso
 
-### En apps (Next.js, Remix, etc.)
+### Configuración en apps
 
-```css
-/* app/globals.css */
-@import "@capsule/tailwind-config";
+#### 1. Instalar el package
+
+```json
+{
+  "dependencies": {
+    "@capsule/tailwind-config": "workspace:*"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.20"
+  }
+}
 ```
 
-### En Storybook
+#### 2. Extender la configuración
+
+```typescript
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+import baseConfig from "@capsule/tailwind-config";
+
+export default {
+  ...baseConfig,
+  content: [
+    "./src/**/*.{ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{ts,tsx}", // Si usas @capsule/ui
+  ],
+} satisfies Config;
+```
+
+#### 3. Importar estilos base
 
 ```css
-/* .storybook/preview.css */
-@import "@capsule/tailwind-config";
+/* app/globals.css o src/input.css */
+@import "@capsule/tailwind-config/base.css";
+```
+
+#### 4. Configurar PostCSS
+
+```javascript
+// postcss.config.js
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
 ```
 
 ### Con `@capsule/ui`
 
-Los componentes de `@capsule/ui` ya usan estos tokens automáticamente.
+Los componentes de `@capsule/ui` ya usan estos tokens automáticamente a través de las clases de Tailwind. Solo necesitas:
+
+1. Extender la configuración de Tailwind (paso 2)
+2. Importar los estilos base (paso 3)
+3. Asegurarte de que el `content` incluya `packages/ui/src/**/*.{ts,tsx}`
 
 ## 🔧 Personalización
 
-Si necesitas extender los tokens en una app específica:
+### Extender colores
+
+```typescript
+// tailwind.config.ts
+import baseConfig from "@capsule/tailwind-config";
+
+export default {
+  ...baseConfig,
+  theme: {
+    ...baseConfig.theme,
+    extend: {
+      ...baseConfig.theme?.extend,
+      colors: {
+        ...baseConfig.theme?.extend?.colors,
+        brand: {
+          500: "#your-color",
+        },
+      },
+    },
+  },
+};
+```
+
+### Agregar utilidades personalizadas
 
 ```css
-@import "@capsule/tailwind-config";
+/* tus-estilos.css */
+@import "@capsule/tailwind-config/base.css";
 
-@theme {
-  /* Tus tokens adicionales */
-  --color-brand: #custom;
+@layer utilities {
+  .your-custom-utility {
+    /* ... */
+  }
 }
 ```
