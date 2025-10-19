@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    appName: "Capsule",
-    children: "I'm a primary button",
+    appName: "Button",
+    children: "I am a primary button.",
   },
 };

@@ -5,7 +5,7 @@
  */
 
 @import "tailwindcss";
-@import "@capsule/ui/styles/tokens.css";
+/* @import "@capsule/ui/styles/tokens.css"; */
 
 /* Root variables for theming */
 :root {
