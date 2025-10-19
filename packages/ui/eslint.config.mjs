@@ -1,4 +1,4 @@
-import { config } from "@capsule/eslint-config/react-internal";
+import { designSystemConfig } from "@capsule/eslint-config/design-system";
 
-/** @type {import("eslint").Linter.Config} */
-export default config;
+/** @type {import("eslint").Linter.Config[]} */
+export default designSystemConfig;

@@ -1,0 +1,4 @@
+/**
+ * Import Capsule Design Tokens (includes Tailwind)
+ */
+@import "@capsule/tailwind-config";
