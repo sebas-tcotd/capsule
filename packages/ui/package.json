@@ -3,19 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./*": "./src/*.tsx",
-    "./styles/*": "./src/styles/*",
-    "./tokens": "./src/tokens/index.ts",
-    "./package.json": "./package.json"
+    ".": "./src/index.ts",
+    "./components/*": "./src/components/*/index.ts",
+    "./styles/*": "./src/styles/*"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
-    "generate:component": "turbo gen react-component",
+    "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@capsule/eslint-config": "workspace:*",
+    "@capsule/tailwind-config": "workspace:*",
     "@capsule/typescript-config": "workspace:*",
+    "@tailwindcss/cli": "^4.1.14",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
