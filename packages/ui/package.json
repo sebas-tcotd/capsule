@@ -5,7 +5,8 @@
   "exports": {
     "./*": "./src/*.tsx",
     "./styles/*": "./src/styles/*",
-    "./tokens": "./src/tokens/index.ts"
+    "./tokens": "./src/tokens/index.ts",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -23,7 +24,9 @@
     "eslint": "^9.34.0",
     "lucide-react": "^0.546.0",
     "tailwind-merge": "^3.3.1",
-    "typescript": "5.9.2"
+    "tailwindcss": "^4.1.14",
+    "typescript": "5.9.2",
+    "vite": "^7.1.7"
   },
   "dependencies": {
     "react": "^19.1.0",
