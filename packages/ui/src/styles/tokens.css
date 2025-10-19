@@ -1,0 +1,8 @@
+/**
+ * Capsule UI - Design Tokens
+ *
+ * Re-exports the shared Tailwind configuration from @capsule/tailwind-config
+ * This ensures a single source of truth for design tokens across the monorepo.
+ */
+
+@import "@capsule/tailwind-config";

@@ -33,9 +33,29 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/) with stri
 
 ### Prerequisites
 
-- Node.js >= 18
-- pnpm 9.0.0
-- Docker & Docker Compose (for database and containerized development)
+- **Node.js v22.15.0 (LTS)** ⚠️ **IMPORTANTE: Usa Node 22. Storybook NO funciona con Node 23+**
+- **pnpm 9.0.0** or higher
+- **Docker & Docker Compose** (for database and containerized development)
+
+#### Node Version Management
+
+Este proyecto requiere Node 22. Si tienes Node 23+, usa nvm para cambiar:
+
+```bash
+# Instalar nvm (si no lo tienes)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Instalar Node 22
+nvm install 22.15.0
+
+# El proyecto incluye .nvmrc, simplemente ejecuta:
+nvm use
+
+# Verificar versión
+node -v  # Debe mostrar v22.15.0
+```
+
+**¿Por qué Node 22?** Storybook 9.1.13 no es compatible con Node 23+ debido a dependencias nativas. Ver `FAQ.md` para más detalles.
 
 ### Local Development (without Docker)
 
@@ -326,9 +346,33 @@ pnpm format              # Format all files with Prettier
 pnpm prepare             # Install Husky hooks
 ```
 
+## 📚 Documentation
+
+### Project Documentation
+
+- **[SETUP.md](./SETUP.md)** - Complete current setup and configuration
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical decisions and architecture
+- **[FAQ.md](./FAQ.md)** - Frequently asked questions with detailed explanations
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Problem-solving guide
+
+### Package-Specific Documentation
+
+- **[packages/ui/README.md](./packages/ui/README.md)** - Component library overview
+- **[packages/ui/STRUCTURE.md](./packages/ui/STRUCTURE.md)** - Component structure guide
+- **[packages/ui/CONTRIBUTING.md](./packages/ui/CONTRIBUTING.md)** - Contribution guidelines
+- **[packages/tailwind-config/README.md](./packages/tailwind-config/README.md)** - Design tokens documentation
+
+### Key Topics
+
+- **Node Version**: See [FAQ.md](./FAQ.md#por-qué-storybook-no-funciona-con-node-23) for why we use Node 22
+- **Tailwind v4**: See [ARCHITECTURE.md](./ARCHITECTURE.md#configuración-de-tailwind-v4) for v3 vs v4 differences
+- **Source vs Dist**: See [ARCHITECTURE.md](./ARCHITECTURE.md#decisión-exportar-código-fuente-vs-código-compilado) for why we export source files
+
 ## Learn More
 
 - [Turborepo Documentation](https://turbo.build/repo/docs)
 - [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS v4](https://tailwindcss.com/docs/v4-beta)
+- [Storybook Documentation](https://storybook.js.org/docs)
 - [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 - [Conventional Commits](https://www.conventionalcommits.org/)

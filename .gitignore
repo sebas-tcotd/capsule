@@ -40,7 +40,11 @@ yarn-error.log*
 # Docker
 docker/postgres/data
 
+# Environment values
 .env*
 .flaskenv*
 !.env.project
 !.env.vault
+
+# Storybook
+storybook-static
