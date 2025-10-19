@@ -71,34 +71,46 @@ export const designSystemConfig = [
 
       // === NAMING CONVENTIONS ===
 
-      // Enforce PascalCase for components
+      // Enforce PascalCase for components following Clean Code principles
+      // Strategy: Main component as const arrow → sub-components as function declarations
       "@typescript-eslint/naming-convention": [
         "error",
         {
-          selector: ["function"],
-          format: ["PascalCase"],
+          // Utility functions (camelCase) - checked first to allow create*, get*, etc.
+          selector: "function",
+          format: ["camelCase"],
           filter: {
-            // Allow non-component functions
-            regex: "^(use|handle|get|set|is|has|should)",
-            match: false,
-          },
-        },
-        {
-          selector: "variable",
-          modifiers: ["const"],
-          types: ["function"],
-          format: ["PascalCase"],
-          filter: {
-            // Component-like variables (JSX)
-            regex: "^[A-Z]",
+            // Include utility function patterns
+            regex:
+              "^(use|handle|get|set|is|has|should|create|make|format|parse|validate|fetch|update|delete|add|remove|toggle|check|cn)",
             match: true,
           },
         },
         {
+          // Main exported components (const arrow functions) → PascalCase
+          selector: "variable",
+          modifiers: ["exported", "const"],
+          types: ["function"],
+          format: ["PascalCase"],
+        },
+        {
+          // Internal sub-components (function declarations) → PascalCase
+          selector: "function",
+          format: ["PascalCase"],
+        },
+        {
+          // Regular const variables → camelCase, PascalCase (types), or UPPER_CASE (constants)
+          selector: "variable",
+          modifiers: ["const"],
+          format: ["camelCase", "PascalCase", "UPPER_CASE"],
+        },
+        {
+          // Type parameters → PascalCase
           selector: "typeParameter",
           format: ["PascalCase"],
         },
         {
+          // Interfaces → PascalCase without I prefix
           selector: "interface",
           format: ["PascalCase"],
           custom: {

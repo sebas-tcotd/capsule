@@ -55,15 +55,21 @@ packages/ui/
 ### Exports
 
 ```tsx
-// ✅ Named exports (preferido)
+// ✅ Átomos: Named exports simples
 export const Button = () => { ... };
 export type ButtonProps = { ... };
+
+// ✅ Moléculas/Organismos: Compound components con Object.assign
+export const Card = Object.assign(CardRoot, {
+  Header: CardHeader,
+  Content: CardContent,
+});
 
 // ❌ Default exports (evitar)
 export default Button;
 ```
 
-**Razón**: Named exports son más fáciles de tree-shake y refactorizar.
+**Razón**: Named exports son más fáciles de tree-shake y refactorizar. Object.assign para compound components provee una API profesional con namespace.
 
 ## 📝 Anatomía de un Componente
 
@@ -74,6 +80,7 @@ export default Button;
 import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 import { cn } from "../../../utils/cn";
+import { createDisplayName } from "../../../utils/displayName";
 
 // 1. Definir variantes con CVA
 const buttonVariants = cva(
@@ -104,6 +111,10 @@ export interface ButtonProps
   isLoading?: boolean;
 }
 
+// ========================================
+// COMPONENTE PRINCIPAL (const arrow)
+// ========================================
+
 // 3. Componente con forwardRef para acceso al DOM
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -117,13 +128,132 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         {...props}
       >
-        {isLoading ? "Loading..." : children}
+        {isLoading ? <LoadingSpinner /> : children}
       </button>
     );
   },
 );
 
-Button.displayName = "Button";
+Button.displayName = createDisplayName("Button", "atom");
+
+// ========================================
+// SUB-COMPONENTES (function declarations)
+// ========================================
+
+function LoadingSpinner() {
+  return <span className="animate-spin">⏳</span>;
+}
+```
+
+### Compound Component (Molecule/Organism)
+
+```tsx
+// src/components/molecules/Card/Card.tsx
+import { forwardRef, type ReactNode } from "react";
+import { cn } from "../../../utils/cn";
+import { createDisplayName } from "../../../utils/displayName";
+
+// 1. Definir interfaces de props
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+// ========================================
+// COMPONENTE ROOT
+// ========================================
+
+const CardRoot = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn("rounded-lg border bg-white shadow-sm", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+CardRoot.displayName = createDisplayName("Card", "molecule");
+
+// ========================================
+// SUB-COMPONENTES
+// ========================================
+
+const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn("flex flex-col space-y-1.5 p-6", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+CardHeader.displayName = "CardHeader";
+
+const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn("p-6 pt-0", className)} {...props}>
+        {children}
+      </div>
+    );
+  },
+);
+
+CardContent.displayName = "CardContent";
+
+const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn("flex items-center p-6 pt-0", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+CardFooter.displayName = "CardFooter";
+
+// ========================================
+// COMPOUND COMPONENT EXPORT
+// ========================================
+
+export const Card = Object.assign(CardRoot, {
+  Header: CardHeader,
+  Content: CardContent,
+  Footer: CardFooter,
+});
+
+// Usage:
+// <Card>
+//   <Card.Header>Title</Card.Header>
+//   <Card.Content>Body content</Card.Content>
+//   <Card.Footer>Actions</Card.Footer>
+// </Card>
 ```
 
 ### Index Export
@@ -215,29 +345,62 @@ cn("px-2 py-1", "px-4")
 
 ## 📊 Patrones de Composición
 
-### Compound Components
+### Compound Components con Object.assign
+
+**Para átomos simples:** Exportaciones independientes
+
+```tsx
+// src/components/atoms/Button/Button.tsx
+export const Button = ({ children }) => <button>{children}</button>;
+
+// src/components/atoms/Badge/Badge.tsx
+export const Badge = ({ children }) => <span>{children}</span>;
+
+// Uso:
+import { Button, Badge } from "@capsule/ui";
+<Button>Click</Button>
+<Badge>New</Badge>
+```
+
+**Para moléculas/organismos:** Compound components con namespace
 
 ```tsx
 // src/components/molecules/Card/Card.tsx
-export const Card = ({ children }) => (
+const CardRoot = ({ children }) => (
   <div className="bg-white rounded-lg shadow">{children}</div>
 );
 
-export const CardHeader = ({ children }) => (
+const CardHeader = ({ children }) => (
   <div className="p-6 border-b">{children}</div>
 );
 
-export const CardBody = ({ children }) => <div className="p-6">{children}</div>;
+const CardContent = ({ children }) => <div className="p-6">{children}</div>;
+
+// Export usando Object.assign
+export const Card = Object.assign(CardRoot, {
+  Header: CardHeader,
+  Content: CardContent,
+});
 
 // src/components/molecules/Card/index.ts
-export { Card, CardHeader, CardBody } from "./Card";
+export { Card } from "./Card";
 
-// Uso
+// Uso con namespace (API profesional)
+import { Card } from "@capsule/ui";
+
 <Card>
-  <CardHeader>Title</CardHeader>
-  <CardBody>Content</CardBody>
+  <Card.Header>Title</Card.Header>
+  <Card.Content>Content</Card.Content>
 </Card>;
 ```
+
+**Ventajas del approach híbrido:**
+
+- ✅ Átomos: Simples, independientes, fácil importación
+- ✅ Moléculas/Organismos: API con namespace clara
+- ✅ Evita colisiones de nombres (Card.Header vs Modal.Header)
+- ✅ Autocomplete muestra sub-componentes disponibles
+- ✅ Sigue estándares de librerías modernas (Radix, Shadcn)
 
 ### Polymorphic Components
 
