@@ -225,6 +225,9 @@
   .animate-spin {
     animation: var(--animate-spin);
   }
+  .cursor-pointer {
+    cursor: pointer;
+  }
   .flex-col {
     flex-direction: column;
   }
@@ -268,9 +271,6 @@
   .bg-error-600 {
     background-color: var(--color-error-600);
   }
-  .bg-neutral-100 {
-    background-color: var(--color-neutral-100);
-  }
   .bg-primary-50 {
     background-color: var(--color-primary-50);
   }
@@ -279,9 +279,6 @@
   }
   .bg-primary-600 {
     background-color: var(--color-primary-600);
-  }
-  .bg-transparent {
-    background-color: transparent;
   }
   .px-3 {
     padding-inline: calc(var(--spacing) * 3);
@@ -313,6 +310,12 @@
   }
   .text-white {
     color: var(--color-white);
+  }
+  .opacity-25 {
+    opacity: 25%;
+  }
+  .opacity-75 {
+    opacity: 75%;
   }
   .outline {
     outline-style: var(--tw-outline-style);

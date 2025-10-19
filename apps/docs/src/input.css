@@ -2,3 +2,13 @@
  * Import Capsule Design Tokens (includes Tailwind)
  */
 @import "@capsule/tailwind-config";
+
+/**
+ * Include UI package components in Tailwind's content scanning
+ * This ensures all classes used in @capsule/ui are generated
+ */
+@source "../../packages/ui/src";
+
+@theme {
+    --color-test1-50: #444;
+}

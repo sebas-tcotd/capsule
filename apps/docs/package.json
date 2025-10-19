@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tailwindcss -i ./src/input.css -o ./src/output.css --watch & storybook dev -p 6006",
-    "build": "tailwindcss -i ./src/input.css -o ./src/output.css && storybook build",
-    "build:css": "tailwindcss -i ./src/input.css -o ./src/output.css"
+    "dev": "pnpm build:css && tailwindcss -i ./src/input.css -o ./src/output.css --watch --content './src/**/*.{ts,tsx,mdx}' --content './../../packages/ui/src/**/*.{ts,tsx}' & storybook dev -p 6006",
+    "build": "tailwindcss -i ./src/input.css -o ./src/output.css --content './src/**/*.{ts,tsx,mdx}' --content './../../packages/ui/src/**/*.{ts,tsx}' && storybook build",
+    "build:css": "tailwindcss -i ./src/input.css -o ./src/output.css --content './src/**/*.{ts,tsx,mdx}' --content './../../packages/ui/src/**/*.{ts,tsx}'",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch --content './src/**/*.{ts,tsx,mdx}' --content './../../packages/ui/src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@capsule/ui": "workspace:*",
