@@ -49,14 +49,11 @@ export const designSystemConfig = [
 
       // === COMPONENT STRUCTURE ===
 
-      // Enforce consistent component declaration
-      "react/function-component-definition": [
-        "error",
-        {
-          namedComponents: "arrow-function",
-          unnamedComponents: "arrow-function",
-        },
-      ],
+      // Component declaration style is documented in CONTRIBUTING.md:
+      // - Main exported components: const arrow functions
+      // - Internal sub-components: function declarations (for hoisting/Clean Code)
+      // We trust the team to follow conventions rather than enforcing via linting
+      "react/function-component-definition": "off",
 
       // Require default props for optional props
       "react/require-default-props": "off", // TypeScript handles this
@@ -82,7 +79,7 @@ export const designSystemConfig = [
           filter: {
             // Include utility function patterns
             regex:
-              "^(use|handle|get|set|is|has|should|create|make|format|parse|validate|fetch|update|delete|add|remove|toggle|check|cn)",
+              "^(use|handle|get|set|is|has|should|create|make|format|parse|validate|fetch|update|delete|add|remove|toggle|check)",
             match: true,
           },
         },
@@ -103,6 +100,21 @@ export const designSystemConfig = [
           selector: "variable",
           modifiers: ["const"],
           format: ["camelCase", "PascalCase", "UPPER_CASE"],
+          filter: {
+            // Allow utility function names like 'cn'
+            regex: "^(cn)$",
+            match: false,
+          },
+        },
+        {
+          // Allow specific utility variable names (like cn)
+          selector: "variable",
+          modifiers: ["const"],
+          format: null,
+          filter: {
+            regex: "^(cn)$",
+            match: true,
+          },
         },
         {
           // Type parameters → PascalCase
@@ -179,6 +191,20 @@ export const designSystemConfig = [
         "error",
         { extensions: [".tsx", ".jsx"] },
       ],
+    },
+  },
+  {
+    // Test files - disable strict type checking
+    files: ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/no-unnecessary-type-assertion": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
     },
   },
   {
