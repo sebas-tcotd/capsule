@@ -13,5 +13,15 @@
   "css.customData": [".vscode/css_custom_data.json"],
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+
+  // Vitest Configuration
+  "vitest.configSearchPatternInclude": "**/*{vite,vitest}*.config*.{ts,js,mjs,cjs,cts,mts}",
+  "vitest.configSearchPatternExclude": "{**/node_modules/**,**/.*/**,*.d.ts}",
+  "vitest.shellType": "child_process",
+  "vitest.filesWatcherInclude": "**/*",
+  "vitest.logLevel": "info",
+  "vitest.applyDiagnostic": true,
+  "vitest.experimentalStaticAstCollect": true,
+  "vitest.maximumConfigs": 5
 }
