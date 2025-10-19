@@ -15,7 +15,6 @@
     "@capsule/eslint-config": "workspace:*",
     "@capsule/tailwind-config": "workspace:*",
     "@capsule/typescript-config": "workspace:*",
-    "@tailwindcss/cli": "^4.1.14",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
@@ -24,7 +23,7 @@
     "eslint": "^9.34.0",
     "lucide-react": "^0.546.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^3.4.17",
     "typescript": "5.9.2",
     "vite": "^7.1.7"
   },

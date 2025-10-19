@@ -82,16 +82,62 @@ function App() {
 }
 ```
 
-### Importar estilos
+### Configurar Tailwind CSS v3
 
-En tu CSS principal (Next.js, Remix, etc.):
+Para usar los componentes, necesitas configurar Tailwind CSS v3 en tu app:
 
-```css
-/* app/globals.css */
-@import "@capsule/ui/styles/tokens.css";
+#### 1. Instalar dependencias
+
+```json
+{
+  "dependencies": {
+    "@capsule/ui": "workspace:*",
+    "@capsule/tailwind-config": "workspace:*"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.20"
+  }
+}
 ```
 
-Esto importará automáticamente los tokens de `@capsule/tailwind-config`.
+#### 2. Extender configuración de Tailwind
+
+```typescript
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+import baseConfig from "@capsule/tailwind-config";
+
+export default {
+  ...baseConfig,
+  content: [
+    "./src/**/*.{ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{ts,tsx}", // Importante!
+  ],
+} satisfies Config;
+```
+
+#### 3. Importar estilos base
+
+```css
+/* app/globals.css o src/input.css */
+@import "@capsule/tailwind-config/base.css";
+```
+
+#### 4. Configurar PostCSS
+
+```javascript
+// postcss.config.js
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+```
+
+**Nota:** El `content` debe incluir `../../packages/ui/src/**/*.{ts,tsx}` para que Tailwind genere las clases usadas en los componentes.
 
 ## 🎯 Componentes Disponibles
 
@@ -125,7 +171,7 @@ src/
 │   ├── molecules/
 │   └── organisms/
 ├── styles/
-│   └── tokens.css (re-exporta @capsule/tailwind-config)
+│   └── tokens.css (documentación de referencia)
 ├── utils/
 │   └── cn.ts
 └── index.ts
