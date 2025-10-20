@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Input } from "@capsule/ui";
 
 const meta = {
   title: "Atoms/Input",
   component: Input,
-  tags: ["autodocs"],
+  tags: ["autodocs", "atoms"],
   argTypes: {
     size: {
       control: "select",
