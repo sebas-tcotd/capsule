@@ -41,12 +41,35 @@ Este es un paquete interno del monorepo. Las apps lo consumen vía workspace pro
 
 ## 🚀 Uso
 
-### Importar componentes
+El paquete soporta **dos estrategias de import** para optimizar performance:
+
+### Estrategia 1: Barrel File (Conveniencia)
+
+Ideal para prototipos y desarrollo rápido:
+
+```tsx
+import { Button, Input, cn } from "@capsule/ui";
+```
+
+### Estrategia 2: Imports Directos (Recomendado para Producción) ⭐
+
+Mejor tree-shaking y bundle size:
+
+```tsx
+import { Button } from "@capsule/ui/atoms/Button";
+import { Input } from "@capsule/ui/atoms/Input";
+import { cn } from "@capsule/ui/utils";
+```
+
+📚 **Para más detalles, consulta [EXPORTS.md](./EXPORTS.md)**
+
+### Ejemplos de Uso
 
 **Átomos (componentes simples):**
 
 ```tsx
-import { Button, Badge } from "@capsule/ui";
+// Opción 1: Barrel file
+import { Button } from "@capsule/ui";
 
 function App() {
   return (

@@ -1,4 +1,4 @@
-import { Button } from "@capsule/ui/components/atoms/Button";
+import { Button } from "@capsule/ui/atoms/Button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
