@@ -43,35 +43,118 @@ Este es un paquete interno del monorepo. Las apps lo consumen vía workspace pro
 
 ### Importar componentes
 
+**Átomos (componentes simples):**
+
 ```tsx
-import { Button } from "@capsule/ui";
+import { Button, Badge } from "@capsule/ui";
 
 function App() {
   return (
-    <Button variant="primary" size="md">
-      Click me
-    </Button>
+    <>
+      <Button variant="primary" size="md">
+        Click me
+      </Button>
+      <Badge>New</Badge>
+    </>
   );
 }
 ```
 
-### Importar estilos
+**Moléculas/Organismos (compound components):**
 
-En tu CSS principal (Next.js, Remix, etc.):
+```tsx
+import { Card } from "@capsule/ui";
 
-```css
-/* app/globals.css */
-@import "@capsule/ui/styles/tokens.css";
+function App() {
+  return (
+    <Card>
+      <Card.Header>
+        <h2>Title</h2>
+      </Card.Header>
+      <Card.Content>
+        <p>Card content goes here</p>
+      </Card.Content>
+      <Card.Footer>
+        <Button>Action</Button>
+      </Card.Footer>
+    </Card>
+  );
+}
 ```
 
-Esto importará automáticamente los tokens de `@capsule/tailwind-config`.
+### Configurar Tailwind CSS v3
+
+Para usar los componentes, necesitas configurar Tailwind CSS v3 en tu app:
+
+#### 1. Instalar dependencias
+
+```json
+{
+  "dependencies": {
+    "@capsule/ui": "workspace:*",
+    "@capsule/tailwind-config": "workspace:*"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.20"
+  }
+}
+```
+
+#### 2. Extender configuración de Tailwind
+
+```typescript
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+import baseConfig from "@capsule/tailwind-config";
+
+export default {
+  ...baseConfig,
+  content: [
+    "./src/**/*.{ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{ts,tsx}", // Importante!
+  ],
+} satisfies Config;
+```
+
+#### 3. Importar estilos base
+
+```css
+/* app/globals.css o src/input.css */
+@import "@capsule/tailwind-config/base.css";
+```
+
+#### 4. Configurar PostCSS
+
+```javascript
+// postcss.config.js
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+```
+
+**Nota:** El `content` debe incluir `../../packages/ui/src/**/*.{ts,tsx}` para que Tailwind genere las clases usadas en los componentes.
 
 ## 🎯 Componentes Disponibles
 
 ### Atoms
 
+Componentes básicos e independientes:
+
 - **Button** - 5 variantes (primary, secondary, outline, ghost, danger), 3 tamaños, loading state
-- _Más componentes próximamente..._
+- _Badge, Icon, Input, Avatar - próximamente..._
+
+### Molecules
+
+Compound components con API namespace:
+
+- _Card, FormField, SearchBar - próximamente..._
+
+**Nota:** Los componentes de moléculas y organismos siguen el patrón de compound components usando `Object.assign` para proveer una API con namespace (ej: `<Card.Header />`). Ver `CONTRIBUTING.md` para más detalles.
 
 ## 🛠️ Desarrollo
 
@@ -88,7 +171,7 @@ src/
 │   ├── molecules/
 │   └── organisms/
 ├── styles/
-│   └── tokens.css (re-exporta @capsule/tailwind-config)
+│   └── tokens.css (documentación de referencia)
 ├── utils/
 │   └── cn.ts
 └── index.ts

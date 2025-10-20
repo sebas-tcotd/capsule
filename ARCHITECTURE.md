@@ -108,50 +108,72 @@ En la mayoría de monorepos **internos** (no publicados a npm), exportar código
    - Un solo paso de compilación
    - Tree-shaking automático de CSS no usado
 
-## 🔧 Configuración de Tailwind v4
+## 🔧 Configuración de Tailwind CSS v3
 
-### En Tailwind v3:
+Usamos Tailwind CSS v3 por su estabilidad, excelente soporte para CVA (Class Variance Authority), y ecosistema maduro.
 
-```js
-// ❌ Tailwind v3 - archivo de configuración JS
-module.exports = {
-  content: ["./src/**/*.{ts,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        primary: "#2C2C2C",
-      },
-    },
+### Arquitectura del sistema
+
+```
+packages/tailwind-config/
+├── tailwind.config.js    # Configuración compartida (colores, fonts, etc.)
+└── base.css              # Estilos base + utilidades personalizadas
+
+apps/docs/ (o cualquier app)
+├── tailwind.config.ts    # Extiende configuración base
+├── postcss.config.js     # PostCSS + Autoprefixer
+└── src/
+    └── input.css         # Importa base.css
+```
+
+### Configuración en una app
+
+#### 1. Instalar dependencias
+
+```json
+{
+  "devDependencies": {
+    "@capsule/tailwind-config": "workspace:*",
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.20"
+  }
+}
+```
+
+#### 2. Configuración de Tailwind
+
+```typescript
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+import baseConfig from "@capsule/tailwind-config";
+
+export default {
+  ...baseConfig,
+  content: [
+    "./src/**/*.{ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{ts,tsx}", // Escanea componentes
+  ],
+} satisfies Config;
+```
+
+#### 3. PostCSS
+
+```javascript
+// postcss.config.js
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
   },
 };
 ```
 
-### En Tailwind v4:
+#### 4. Importar estilos
 
 ```css
-/* ✅ Tailwind v4 - CSS-first configuration */
-@import "tailwindcss";
-
-@theme {
-  --color-primary-500: #2c2c2c;
-}
-```
-
-#### Diferencias clave:
-
-| Aspecto    | v3                     | v4                                              |
-| ---------- | ---------------------- | ----------------------------------------------- |
-| **Config** | `tailwind.config.js`   | CSS con `@theme`                                |
-| **Tokens** | JavaScript object      | CSS variables                                   |
-| **Scan**   | `content: []` en JS    | `@source` en CSS o `content` en config opcional |
-| **Import** | `@tailwind base;`      | `@import "tailwindcss";`                        |
-| **Plugin** | PostCSS + autoprefixer | `@tailwindcss/vite`                             |
-
-### Nuestra configuración:
-
-```css
-/* packages/tailwind-config/shared-styles.css */
-@import "tailwindcss";
+/* src/input.css */
+@import "@capsule/tailwind-config/base.css";
 
 @theme {
   --color-primary-500: #2c2c2c;

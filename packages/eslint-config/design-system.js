@@ -49,14 +49,11 @@ export const designSystemConfig = [
 
       // === COMPONENT STRUCTURE ===
 
-      // Enforce consistent component declaration
-      "react/function-component-definition": [
-        "error",
-        {
-          namedComponents: "arrow-function",
-          unnamedComponents: "arrow-function",
-        },
-      ],
+      // Component declaration style is documented in CONTRIBUTING.md:
+      // - Main exported components: const arrow functions
+      // - Internal sub-components: function declarations (for hoisting/Clean Code)
+      // We trust the team to follow conventions rather than enforcing via linting
+      "react/function-component-definition": "off",
 
       // Require default props for optional props
       "react/require-default-props": "off", // TypeScript handles this
@@ -71,34 +68,61 @@ export const designSystemConfig = [
 
       // === NAMING CONVENTIONS ===
 
-      // Enforce PascalCase for components
+      // Enforce PascalCase for components following Clean Code principles
+      // Strategy: Main component as const arrow → sub-components as function declarations
       "@typescript-eslint/naming-convention": [
         "error",
         {
-          selector: ["function"],
-          format: ["PascalCase"],
+          // Utility functions (camelCase) - checked first to allow create*, get*, etc.
+          selector: "function",
+          format: ["camelCase"],
           filter: {
-            // Allow non-component functions
-            regex: "^(use|handle|get|set|is|has|should)",
-            match: false,
-          },
-        },
-        {
-          selector: "variable",
-          modifiers: ["const"],
-          types: ["function"],
-          format: ["PascalCase"],
-          filter: {
-            // Component-like variables (JSX)
-            regex: "^[A-Z]",
+            // Include utility function patterns
+            regex:
+              "^(use|handle|get|set|is|has|should|create|make|format|parse|validate|fetch|update|delete|add|remove|toggle|check)",
             match: true,
           },
         },
         {
+          // Main exported components (const arrow functions) → PascalCase
+          selector: "variable",
+          modifiers: ["exported", "const"],
+          types: ["function"],
+          format: ["PascalCase"],
+        },
+        {
+          // Internal sub-components (function declarations) → PascalCase
+          selector: "function",
+          format: ["PascalCase"],
+        },
+        {
+          // Regular const variables → camelCase, PascalCase (types), or UPPER_CASE (constants)
+          selector: "variable",
+          modifiers: ["const"],
+          format: ["camelCase", "PascalCase", "UPPER_CASE"],
+          filter: {
+            // Allow utility function names like 'cn'
+            regex: "^(cn)$",
+            match: false,
+          },
+        },
+        {
+          // Allow specific utility variable names (like cn)
+          selector: "variable",
+          modifiers: ["const"],
+          format: null,
+          filter: {
+            regex: "^(cn)$",
+            match: true,
+          },
+        },
+        {
+          // Type parameters → PascalCase
           selector: "typeParameter",
           format: ["PascalCase"],
         },
         {
+          // Interfaces → PascalCase without I prefix
           selector: "interface",
           format: ["PascalCase"],
           custom: {
@@ -167,6 +191,20 @@ export const designSystemConfig = [
         "error",
         { extensions: [".tsx", ".jsx"] },
       ],
+    },
+  },
+  {
+    // Test files - disable strict type checking
+    files: ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/no-unnecessary-type-assertion": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
     },
   },
   {

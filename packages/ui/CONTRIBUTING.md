@@ -34,29 +34,44 @@ components/
 #### ✅ DO
 
 ```typescript
-// Component names: PascalCase
+// Main exported components: const arrow functions in PascalCase
 export const Button = () => { ... };
 export const FormField = () => { ... };
 
-// Props interfaces: ComponentNameProps
+// Props interfaces: ComponentNameProps (no "I" prefix)
 export interface ButtonProps { ... }
 export interface FormFieldProps { ... }
+
+// Utility functions: camelCase with descriptive prefixes
+function getButtonClasses() { ... }
+function createDisplayName() { ... }
+function formatDate() { ... }
 
 // Variants/types: lowercase with hyphens (for cn() utility)
 variant: 'primary' | 'secondary' | 'ghost'
 size: 'sm' | 'md' | 'lg'
 
-// Compound components
+// Compound components (molecules/organisms): Object.assign pattern
+const CardRoot = ({ children }) => <div>{children}</div>;
+const CardHeader = ({ children }) => <header>{children}</header>;
+const CardContent = ({ children }) => <main>{children}</main>;
+
 export const Card = Object.assign(CardRoot, {
   Header: CardHeader,
   Content: CardContent,
 });
+
+// Usage:
+<Card>
+  <Card.Header>Title</Card.Header>
+  <Card.Content>Body</Card.Content>
+</Card>
 ```
 
 #### ❌ DON'T
 
 ```typescript
-// No prefixes for atomic levels
+// No prefixes for atomic levels in component names
 export const AtButton = () => { ... };  ❌
 export const MlFormField = () => { ... };  ❌
 
@@ -65,16 +80,24 @@ export interface IButtonProps { ... }  ❌
 
 // No camelCase for variants
 variant: 'primaryButton'  ❌
+
+// No function declarations for main exported components
+export function Button() { ... }  ❌
+
+// No separate exports for compound components
+export const Card = () => { ... };
+export const CardHeader = () => { ... };  ❌ Use Object.assign instead
 ```
 
 ## Component Template
 
-### Basic Component
+### Basic Component (Atom)
 
 ```typescript
 import { forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../utils/cn';
+import { cn } from '../../../utils/cn';
+import { createDisplayName } from '../../../utils/displayName';
 
 // Define variants using CVA
 const buttonVariants = cva(
@@ -114,7 +137,10 @@ export interface ButtonProps
   leftIcon?: React.ReactNode;
 }
 
-// Component with forwardRef for ref passing
+// ========================================
+// MAIN COMPONENT (const arrow function)
+// ========================================
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, leftIcon, children, ...props }, ref) => {
     return (
@@ -123,14 +149,111 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       >
-        {leftIcon && <span className="mr-2">{leftIcon}</span>}
+        {leftIcon && <ButtonIcon>{leftIcon}</ButtonIcon>}
         {children}
       </button>
     );
   }
 );
 
-Button.displayName = 'Button';
+Button.displayName = createDisplayName('Button', 'atom');
+
+// ========================================
+// SUB-COMPONENTS (function declarations - use hoisting)
+// ========================================
+
+function ButtonIcon({ children }: { children: React.ReactNode }) {
+  return <span className="mr-2">{children}</span>;
+}
+```
+
+### Compound Component (Molecule/Organism)
+
+```typescript
+import { forwardRef } from 'react';
+import type { ReactNode } from 'react';
+import { cn } from '../../../utils/cn';
+import { createDisplayName } from '../../../utils/displayName';
+
+// Props interfaces
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+// ========================================
+// MAIN COMPONENT
+// ========================================
+
+const CardRoot = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn('rounded-lg border bg-white shadow-sm', className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+CardRoot.displayName = createDisplayName('Card', 'molecule');
+
+// ========================================
+// SUB-COMPONENTS
+// ========================================
+
+const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn('flex flex-col space-y-1.5 p-6', className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+CardHeader.displayName = 'CardHeader';
+
+const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn('p-6 pt-0', className)} {...props}>
+        {children}
+      </div>
+    );
+  }
+);
+
+CardContent.displayName = 'CardContent';
+
+// ========================================
+// COMPOUND COMPONENT EXPORT
+// ========================================
+
+export const Card = Object.assign(CardRoot, {
+  Header: CardHeader,
+  Content: CardContent,
+});
+
+// Usage:
+// <Card>
+//   <Card.Header>Title</Card.Header>
+//   <Card.Content>Body content</Card.Content>
+// </Card>
 ```
 
 ### Story Template

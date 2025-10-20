@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@capsule/ui/components/atoms/Button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Atoms/Button",
@@ -7,7 +7,7 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-  tags: ["autodocs"],
+  tags: ["autodocs", "atoms"],
   argTypes: {
     variant: {
       control: "select",
