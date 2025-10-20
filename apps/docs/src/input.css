@@ -1,4 +1,5 @@
 /**
- * Import Capsule Design Tokens (includes Tailwind)
+ * Capsule Docs - Tailwind CSS v3
+ * Import base styles from @capsule/tailwind-config
  */
-@import "@capsule/tailwind-config";
+@import "@capsule/tailwind-config/base.css";

@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 import { cn } from "../../../utils";
+import { createDisplayName } from "../../../utils/displayName";
 
 const buttonVariants = cva(
   // Base styles
@@ -9,6 +10,7 @@ const buttonVariants = cva(
     "rounded-lg font-medium transition-colors",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
+    "cursor-auto",
   ],
   {
     variants: {
@@ -122,4 +124,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-Button.displayName = "Button";
+Button.displayName = createDisplayName("Button", "atom");

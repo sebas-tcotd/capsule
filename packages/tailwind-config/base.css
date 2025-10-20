@@ -1,0 +1,77 @@
+/**
+ * Capsule Design System - Base Styles
+ * Tailwind CSS v3
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-200;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-900 font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Headings */
+  h1 {
+    @apply text-5xl font-bold leading-tight tracking-tight;
+  }
+
+  h2 {
+    @apply text-4xl font-bold leading-tight tracking-tight;
+  }
+
+  h3 {
+    @apply text-3xl font-semibold leading-snug;
+  }
+
+  h4 {
+    @apply text-2xl font-semibold leading-snug;
+  }
+
+  h5 {
+    @apply text-xl font-semibold leading-normal;
+  }
+
+  h6 {
+    @apply text-lg font-semibold leading-normal;
+  }
+}
+
+@layer utilities {
+  /* Semantic text colors */
+  .text-primary {
+    @apply text-neutral-900;
+  }
+
+  .text-secondary {
+    @apply text-neutral-600;
+  }
+
+  .text-tertiary {
+    @apply text-neutral-500;
+  }
+
+  .text-muted {
+    @apply text-neutral-400;
+  }
+
+  /* Semantic background colors */
+  .bg-background {
+    @apply bg-neutral-50;
+  }
+
+  .bg-surface {
+    @apply bg-white;
+  }
+
+  /* Focus ring utility */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+}
