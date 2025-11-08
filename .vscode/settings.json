@@ -21,7 +21,5 @@
   "vitest.shellType": "child_process",
   "vitest.filesWatcherInclude": "**/*",
   "vitest.logLevel": "info",
-  "vitest.applyDiagnostic": true,
-  "vitest.experimentalStaticAstCollect": true,
-  "vitest.maximumConfigs": 5
+  "vitest.applyDiagnostic": true
 }
