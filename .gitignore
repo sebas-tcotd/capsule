@@ -48,3 +48,34 @@ docker/postgres/data
 
 # Storybook
 storybook-static
+
+# --- BMAD & AI Agents ---
+# Ignorar salidas temporales (mueve lo importante a /docs)
+_bmad-output/
+
+# Ignorar memoria local y estado de los agentes (contexto dinámico)
+_bmad/_memory/
+_bmad/**/memory/
+.bmad-core/
+
+# Mantener configuración y definiciones de workflows (_config, bmb, bmm, cis, core)
+!_bmad/_config/
+!_bmad/bmb/
+!_bmad/bmm/
+!_bmad/cis/
+!_bmad/core/ 
+# Nota sobre 'core': Si 'core' contiene binarios o deps instaladas, ignóralo. 
+# Si contiene scripts custom del proyecto, mantenlo. 
+# Por lo general en BMAD, si es scaffolded code, se trackea.
+
+# --- IDE & Editors Integration ---
+# Ignorar estado local de editores, pero trackear configuraciones compartidas
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+# Trackear comandos de IA compartidos
+!.cursor/commands/
+!.claude/commands/
+!.gemini/commands/
