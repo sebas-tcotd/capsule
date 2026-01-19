@@ -79,3 +79,6 @@ _bmad/**/memory/
 !.cursor/commands/
 !.claude/commands/
 !.gemini/commands/
+
+# --- Private Documentation ---
+docs/internal/
