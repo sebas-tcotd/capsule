@@ -13,7 +13,7 @@
   }
 
   body {
-    @apply bg-neutral-50 text-neutral-900 font-sans antialiased;
+    @apply text-neutral-900 font-sans antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -73,5 +73,26 @@
   /* Focus ring utility */
   .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+
+  /* Squircle - Continuous curvature (superellipse) effect
+   * Uses mask-image with a superellipse SVG for smooth corners
+   * Fallback to standard border-radius for unsupported browsers
+   */
+  .squircle {
+    --squircle-smooth: 4; /* Smoothness factor for superellipse */
+    /* The mask creates a true squircle shape */
+    mask-image: paint(squircle);
+    -webkit-mask-image: paint(squircle);
+    /* Ensure background clips to the mask */
+    background-clip: padding-box;
+  }
+
+  /* For browsers without Houdini paint support, we get graceful degradation */
+  @supports not (mask-image: paint(squircle)) {
+    .squircle {
+      /* Fallback relies on the element having a rounded-* utility class */
+      /* No forced border-radius here to allow flexibility */
+    }
   }
 }

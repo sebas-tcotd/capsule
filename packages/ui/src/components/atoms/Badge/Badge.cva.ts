@@ -4,7 +4,7 @@ export const badgeVariants = cva(
   // Base styles
   [
     "inline-flex items-center gap-1.5",
-    "rounded-md font-medium transition-colors",
+    "squircle rounded-lg font-medium transition-colors",
     "focus:outline-none focus:ring-2 focus:ring-offset-2",
   ],
   {

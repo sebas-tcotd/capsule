@@ -12,17 +12,19 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "next": "15.5.6"
+    "next": "16.1.6"
   },
   "devDependencies": {
     "@capsule/eslint-config": "workspace:*",
+    "@capsule/tailwind-config": "workspace:*",
     "@capsule/typescript-config": "workspace:*",
     "typescript": "5.9.2",
     "@types/node": "^20",
     "@types/react": "^19.1.16",
     "@types/react-dom": "19.1.1",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
     "eslint": "^9"
   }
 }

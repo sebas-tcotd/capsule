@@ -1,0 +1,10 @@
+<svg width="256" height="256" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top Bar: Text Primary (#1C1C1C) -->
+  <rect x="15" y="15" width="70" height="18" rx="9" fill="#1C1C1C" />
+  
+  <!-- Middle Bar: Semantic Warning/Terracota (#C47C5D) -->
+  <rect x="15" y="41" width="45" height="18" rx="9" fill="#C47C5D" />
+  
+  <!-- Bottom Bar: Text Primary (#1C1C1C) -->
+  <rect x="15" y="67" width="70" height="18" rx="9" fill="#1C1C1C" />
+</svg>

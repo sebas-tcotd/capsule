@@ -25,6 +25,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-vitest"),
   ],
+  staticDirs: ["../public"],
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),
     options: {},

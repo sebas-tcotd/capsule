@@ -7,7 +7,7 @@ import { createDisplayName } from "../../../utils/displayName";
 const inputVariants = cva(
   // Base styles
   [
-    "w-full rounded-md border transition-colors",
+    "w-full squircle rounded-xl border transition-colors",
     "placeholder:text-neutral-400",
     "focus:outline-none focus:ring-2 focus:ring-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-neutral-50",

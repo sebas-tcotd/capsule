@@ -1,33 +1,17 @@
 /**
  * Capsule - Global Styles
  *
- * Imports Capsule design system tokens
+ * Tailwind CSS v3.4 configuration
  */
 
-@import "tailwindcss";
-/* @import "@capsule/ui/styles/tokens.css"; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Root variables for theming */
+/* Root variables for theming - Premium Studio Light Mode */
 :root {
-  --background: #FAFAFA;
+  --background: #FDFCFB;
   --foreground: #171717;
-  --font-inter-sans: Inter, system-ui, -apple-system, sans-serif;
-  --font-inter-mono: 'JetBrains Mono', 'Courier New', monospace;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-/* Dark mode (for future implementation) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
