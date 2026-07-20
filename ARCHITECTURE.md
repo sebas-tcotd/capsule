@@ -2,6 +2,8 @@
 
 Este documento explica las decisiones arquitectónicas del monorepo y por qué están estructurados de esta manera.
 
+> Para la decisión de tokens/Tailwind (v3 vs. el enfoque CSS-first v4 que se probó y se revirtió), ver [`docs/decisions/0001-tailwind-v3-vs-v4-tokens.md`](./docs/decisions/0001-tailwind-v3-vs-v4-tokens.md). Este documento cubre únicamente la decisión de exportar código fuente vs. compilado, que sigue vigente.
+
 ## 📦 Estructura General
 
 ```
@@ -108,113 +110,6 @@ En la mayoría de monorepos **internos** (no publicados a npm), exportar código
    - Un solo paso de compilación
    - Tree-shaking automático de CSS no usado
 
-## 🔧 Configuración de Tailwind CSS v3
-
-Usamos Tailwind CSS v3 por su estabilidad, excelente soporte para CVA (Class Variance Authority), y ecosistema maduro.
-
-### Arquitectura del sistema
-
-```
-packages/tailwind-config/
-├── tailwind.config.js    # Configuración compartida (colores, fonts, etc.)
-└── base.css              # Estilos base + utilidades personalizadas
-
-apps/docs/ (o cualquier app)
-├── tailwind.config.ts    # Extiende configuración base
-├── postcss.config.js     # PostCSS + Autoprefixer
-└── src/
-    └── input.css         # Importa base.css
-```
-
-### Configuración en una app
-
-#### 1. Instalar dependencias
-
-```json
-{
-  "devDependencies": {
-    "@capsule/tailwind-config": "workspace:*",
-    "tailwindcss": "^3.4.17",
-    "postcss": "^8.5.3",
-    "autoprefixer": "^10.4.20"
-  }
-}
-```
-
-#### 2. Configuración de Tailwind
-
-```typescript
-// tailwind.config.ts
-import type { Config } from "tailwindcss";
-import baseConfig from "@capsule/tailwind-config";
-
-export default {
-  ...baseConfig,
-  content: [
-    "./src/**/*.{ts,tsx,mdx}",
-    "../../packages/ui/src/**/*.{ts,tsx}", // Escanea componentes
-  ],
-} satisfies Config;
-```
-
-#### 3. PostCSS
-
-```javascript
-// postcss.config.js
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-};
-```
-
-#### 4. Importar estilos
-
-```css
-/* src/input.css */
-@import "@capsule/tailwind-config/base.css";
-
-@theme {
-  --color-primary-500: #2c2c2c;
-  /* ... más tokens */
-}
-```
-
-```ts
-// apps/docs/tailwind.config.ts (opcional, para content scanning)
-export default {
-  content: ["./src/**/*.{ts,tsx,mdx}", "../../packages/ui/src/**/*.{ts,tsx}"],
-};
-```
-
-## 🎨 Flujo de Design Tokens
-
-```
-@capsule/tailwind-config
-    ↓ (shared-styles.css)
-    ↓ @theme { --color-primary-500: #2C2C2C }
-    ↓
-@capsule/ui
-    ↓ (tokens.css re-exporta)
-    ↓ @import "@capsule/tailwind-config"
-    ↓
-apps/docs & apps/web
-    ↓ (input.css importa)
-    ↓ @import "@capsule/tailwind-config"
-    ↓
-    ↓ (Vite/Next.js compila)
-    ↓
-output.css (CSS final con todos los tokens)
-```
-
-**Ventajas de este flujo:**
-
-1. **Single Source of Truth**: Tokens solo en `tailwind-config`
-2. **DRY**: No duplicamos definiciones
-3. **Centralizado**: Cambias un token, se actualiza en todas las apps
-4. **Type-safe**: CSS variables consistentes en todo el monorepo
-
 ## 📝 Cuándo SÍ compilar a `dist/`
 
 Compila a `dist/` cuando:
@@ -265,34 +160,9 @@ Compila a `dist/` cuando:
 - Builds optimizados críticos
 - Equipos grandes con CI/CD complejo
 
-## 🔍 Debugging Tips
-
-Si encuentras errores:
-
-1. **"Cannot find module '@capsule/ui'"**:
-
-   ```bash
-   # Verifica que el package.json tenga exports correctos
-   pnpm --filter docs add @capsule/ui
-   ```
-
-2. **"Tailwind classes not working"**:
-
-   ```bash
-   # Asegúrate que content escanea los archivos correctos
-   # apps/docs/tailwind.config.ts
-   content: ['../../packages/ui/src/**/*.{ts,tsx}']
-   ```
-
-3. **"Module not found: Can't resolve 'react'"**:
-   ```bash
-   # Asegúrate que react está en dependencies, no devDependencies
-   cd packages/ui
-   pnpm add react react-dom
-   ```
+Para errores comunes ("Cannot find module '@capsule/ui'", clases de Tailwind que no aplican, etc.), ver [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md).
 
 ## 📚 Referencias
 
 - [Turborepo Internal Packages](https://turbo.build/repo/docs/handbook/sharing-code/internal-packages)
-- [Tailwind CSS v4 Docs](https://tailwindcss.com/docs/v4-beta)
 - [Atomic Design Methodology](https://atomicdesign.bradfrost.com/)

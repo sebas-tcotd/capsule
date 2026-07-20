@@ -81,8 +81,8 @@ Para nuevos desarrolladores o para refrescar el conocimiento del proyecto:
 
 - **[README.md](../README.md)** - Introducción general al proyecto
 - **[ARCHITECTURE.md](../ARCHITECTURE.md)** - Arquitectura del proyecto
-- **[SETUP.md](../SETUP.md)** - Instrucciones de configuración
-- **[FAQ.md](../FAQ.md)** - Preguntas frecuentes
+- **[SETUP.md](archive/SETUP.md)** - Instrucciones de configuración
+- **[FAQ.md](archive/FAQ.md)** - Preguntas frecuentes
 - **[TROUBLESHOOTING.md](../TROUBLESHOOTING.md)** - Solución de problemas comunes
 
 ### Por Aplicación
@@ -123,7 +123,7 @@ Para nuevos desarrolladores o para refrescar el conocimiento del proyecto:
 
 **2. Setup Local**
 
-- Sigue las instrucciones en [SETUP.md](../SETUP.md)
+- Sigue las instrucciones en [SETUP.md](archive/SETUP.md)
 - Revisa [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) si encuentras problemas
 
 **3. Desarrollo**
@@ -427,8 +427,8 @@ Para contribuir al proyecto:
 | Tema                 | Documento                                   |
 | -------------------- | ------------------------------------------- |
 | Problemas comunes    | [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) |
-| Preguntas frecuentes | [FAQ.md](../FAQ.md)                         |
-| Setup inicial        | [SETUP.md](../SETUP.md)                     |
+| Preguntas frecuentes | [FAQ.md](archive/FAQ.md)                    |
+| Setup inicial        | [SETUP.md](archive/SETUP.md)                |
 | Arquitectura         | [ARCHITECTURE.md](../ARCHITECTURE.md)       |
 
 ### Recursos
@@ -474,13 +474,13 @@ Para contribuir al proyecto:
 
 1. [Technology Stack](./technology-stack.md)
 2. [Project Overview](./project-overview.md)
-3. [SETUP.md](../SETUP.md)
+3. [SETUP.md](archive/SETUP.md)
 
 **Product/PM:**
 
 1. [Project Overview](./project-overview.md)
 2. [README.md](../README.md)
-3. [FAQ.md](../FAQ.md)
+3. [FAQ.md](archive/FAQ.md)
 
 ---
 

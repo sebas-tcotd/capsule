@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { SquircleRegistry } from "../components/SquircleRegistry";
 
 const inter = Inter({
-  variable: "--font-inter-sans",
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600"],
+  display: "swap",
 });
 
-const interMono = JetBrains_Mono({
-  variable: "--font-inter-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${inter.variable} ${interMono.variable} antialiased`}>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans`}
+      >
+        <SquircleRegistry />
         {children}
       </body>
     </html>

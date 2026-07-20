@@ -22,5 +22,9 @@ export { Link, type LinkProps } from "./components/atoms/Link";
 export { Radio, type RadioProps } from "./components/atoms/Radio";
 export { Skeleton, type SkeletonProps } from "./components/atoms/Skeleton";
 export { Spinner, type SpinnerProps } from "./components/atoms/Spinner";
+export {
+  SquircleBox,
+  type SquircleBoxProps,
+} from "./components/atoms/SquircleBox";
 export { Switch, type SwitchProps } from "./components/atoms/Switch";
 export { Tag, type TagProps } from "./components/atoms/Tag";

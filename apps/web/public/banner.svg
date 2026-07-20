@@ -1,0 +1,47 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Subtle Pattern for "Natural Paper" texture feel -->
+    <pattern id="dot-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#E5E5E5" />
+    </pattern>
+    
+    <!-- Gradient for a premium touch on the accent -->
+    <linearGradient id="accent-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C47C5D" />
+      <stop offset="100%" stop-color="#A66347" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background: Canvas Base -->
+  <rect width="1200" height="400" fill="#FDFCFB" />
+  <rect width="1200" height="400" fill="url(#dot-pattern)" fill-opacity="0.5" />
+
+  <!-- Content Group: Centered -->
+  <g transform="translate(600, 200)">
+    
+    <!-- Logo Icon (Left of text or Top? Let's go Left for a wide banner) 
+         Actually, let's stack them for a Hero look. Logo Top, Text Bottom.
+    -->
+    
+    <!-- Logo Group (Scaled 2x) centered at roughly -80y -->
+    <g transform="translate(-100, -140) scale(2)">
+      <!-- Top Bar -->
+      <rect x="15" y="15" width="70" height="18" rx="9" fill="#1C1C1C" />
+      <!-- Middle Bar -->
+      <rect x="15" y="41" width="45" height="18" rx="9" fill="url(#accent-gradient)" />
+      <!-- Bottom Bar -->
+      <rect x="15" y="67" width="70" height="18" rx="9" fill="#1C1C1C" />
+    </g>
+
+    <!-- Title -->
+    <text x="0" y="60" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="800" font-size="80" fill="#1C1C1C" letter-spacing="-2">
+      CAPSULE
+    </text>
+
+    <!-- Subtitle / Tagline -->
+    <text x="0" y="110" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="400" font-size="28" fill="#6B7280" letter-spacing="4">
+      SMART WARDROBE MANAGEMENT
+    </text>
+
+  </g>
+</svg>

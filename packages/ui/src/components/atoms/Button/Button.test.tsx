@@ -12,50 +12,70 @@ describe("Button", () => {
       expect(getByRole("button", { name: "Click me" })).toBeInTheDocument();
     });
 
-    it("renders with primary variant by default", () => {
+    it("renders with primary/solid intent+tone by default", () => {
       render(<Button data-testid="button">Primary</Button>);
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-primary-500");
+      expect(button).toHaveClass("bg-primary-500", "shadow-studio");
     });
 
-    it("renders with secondary variant", () => {
+    it("renders neutral solid intent", () => {
       render(
-        <Button variant="secondary" data-testid="button">
-          Secondary
+        <Button intent="neutral" data-testid="button">
+          Neutral
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-accent-500");
+      expect(button).toHaveClass("bg-neutral-700");
     });
 
-    it("renders with outline variant", () => {
+    it("renders outline tone (precision border, no fill)", () => {
       render(
-        <Button variant="outline" data-testid="button">
+        <Button tone="outline" data-testid="button">
           Outline
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("border-2", "border-primary-500");
+      expect(button).toHaveClass("border-primary-500", "bg-transparent");
     });
 
-    it("renders with ghost variant", () => {
+    it("renders ghost tone (glassmorphism) — the spec's Secondary/Choice tier", () => {
       render(
-        <Button variant="ghost" data-testid="button">
+        <Button tone="ghost" data-testid="button">
           Ghost
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("text-primary-500", "bg-transparent");
+      expect(button).toHaveClass("backdrop-blur-md", "bg-primary-50/60");
     });
 
-    it("renders with danger variant", () => {
+    it("renders text tone — the spec's Tertiary/Support tier", () => {
       render(
-        <Button variant="danger" data-testid="button">
+        <Button tone="text" data-testid="button">
+          Text
+        </Button>,
+      );
+      const button = screen.getByTestId("button");
+      expect(button).toHaveClass("bg-transparent", "font-light");
+    });
+
+    it("renders danger intent with solid tone", () => {
+      render(
+        <Button intent="danger" data-testid="button">
           Danger
         </Button>,
       );
       const button = screen.getByTestId("button");
       expect(button).toHaveClass("bg-error-500");
+    });
+
+    it("renders danger intent with ghost tone (previously impossible with the old flat variant enum)", () => {
+      render(
+        <Button intent="danger" tone="ghost" data-testid="button">
+          Danger Ghost
+        </Button>,
+      );
+      const button = screen.getByTestId("button");
+      expect(button).toHaveClass("text-error-700", "backdrop-blur-md");
     });
   });
 
@@ -272,7 +292,7 @@ describe("Button", () => {
   });
 
   describe("Custom className", () => {
-    it("merges custom className with variant classes", () => {
+    it("merges custom className with intent/tone classes", () => {
       render(
         <Button className="custom-class" data-testid="button">
           Custom
@@ -280,7 +300,7 @@ describe("Button", () => {
       );
       const button = screen.getByTestId("button");
       expect(button).toHaveClass("custom-class");
-      expect(button).toHaveClass("bg-primary-500"); // Still has variant classes
+      expect(button).toHaveClass("bg-primary-500"); // Still has intent/tone classes
     });
   });
 
@@ -376,10 +396,10 @@ describe("Button", () => {
     });
   });
 
-  describe("Variant Combinations", () => {
-    it("renders small primary button", () => {
+  describe("Intent x Tone Combinations", () => {
+    it("renders small primary/solid button", () => {
       render(
-        <Button variant="primary" size="sm" data-testid="button">
+        <Button intent="primary" tone="solid" size="sm" data-testid="button">
           Small Primary
         </Button>,
       );
@@ -387,9 +407,9 @@ describe("Button", () => {
       expect(button).toHaveClass("bg-primary-500", "h-9", "px-3");
     });
 
-    it("renders large danger button", () => {
+    it("renders large danger/solid button", () => {
       render(
-        <Button variant="danger" size="lg" data-testid="button">
+        <Button intent="danger" tone="solid" size="lg" data-testid="button">
           Large Danger
         </Button>,
       );
@@ -399,22 +419,22 @@ describe("Button", () => {
 
     it("renders full width outline button", () => {
       render(
-        <Button variant="outline" fullWidth data-testid="button">
+        <Button tone="outline" fullWidth data-testid="button">
           Full Outline
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("border-2", "border-primary-500", "w-full");
+      expect(button).toHaveClass("border-primary-500", "w-full");
     });
 
     it("renders loading ghost button", () => {
       render(
-        <Button variant="ghost" isLoading data-testid="button">
+        <Button tone="ghost" isLoading data-testid="button">
           Loading Ghost
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("text-primary-500", "bg-transparent");
+      expect(button).toHaveClass("backdrop-blur-md", "bg-primary-50/60");
       expect(button).toBeDisabled();
       expect(screen.getByText("Loading...")).toBeInTheDocument();
     });

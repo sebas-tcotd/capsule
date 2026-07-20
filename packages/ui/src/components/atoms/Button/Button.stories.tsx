@@ -9,10 +9,15 @@ const meta: Meta<typeof Button> = {
   },
   tags: ["autodocs", "atoms"],
   argTypes: {
-    variant: {
+    intent: {
       control: "select",
-      options: ["primary", "secondary", "outline", "ghost", "danger"],
-      description: "Visual style of the button",
+      options: ["primary", "neutral", "danger"],
+      description: "Semantic meaning of the button",
+    },
+    tone: {
+      control: "select",
+      options: ["solid", "outline", "ghost", "text"],
+      description: "Visual treatment of the button",
     },
     size: {
       control: "select",
@@ -43,14 +48,32 @@ export const Default: Story = {
   },
 };
 
-export const Variants: Story = {
+/**
+ * The three tiers from "Button Hierarchy (Tactile Luxury)" in the UX spec:
+ * Primary/Deploy = solid, Secondary/Choice = ghost, Tertiary/Support = text.
+ */
+export const Hierarchy: Story = {
   render: () => (
     <div className="flex gap-3">
-      <Button variant="primary">Primary</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="ghost">Ghost</Button>
-      <Button variant="danger">Danger</Button>
+      <Button tone="solid">Deploy Outfit</Button>
+      <Button tone="ghost">Ver alternativa</Button>
+      <Button tone="text">Omitir por ahora</Button>
+    </div>
+  ),
+};
+
+export const IntentXTone: Story = {
+  render: () => (
+    <div className="grid grid-cols-4 gap-4">
+      {(["primary", "neutral", "danger"] as const).map((intent) => (
+        <div key={intent} className="contents">
+          {(["solid", "outline", "ghost", "text"] as const).map((tone) => (
+            <Button key={`${intent}-${tone}`} intent={intent} tone={tone}>
+              {intent} / {tone}
+            </Button>
+          ))}
+        </div>
+      ))}
     </div>
   ),
 };
@@ -69,10 +92,10 @@ export const Loading: Story = {
   render: () => (
     <div className="flex gap-3">
       <Button isLoading>Loading</Button>
-      <Button isLoading variant="outline">
+      <Button isLoading tone="outline">
         Processing
       </Button>
-      <Button isLoading variant="secondary">
+      <Button isLoading tone="ghost">
         Submitting
       </Button>
     </div>
@@ -83,37 +106,40 @@ export const Disabled: Story = {
   render: () => (
     <div className="flex gap-3">
       <Button disabled>Disabled</Button>
-      <Button disabled variant="outline">
+      <Button disabled tone="outline">
         Disabled
       </Button>
-      <Button disabled variant="ghost">
+      <Button disabled tone="ghost">
         Disabled
       </Button>
     </div>
   ),
 };
 
-export const OutlineVariant: Story = {
+export const OutlineTone: Story = {
   render: () => (
     <div className="flex gap-3">
-      <Button variant="outline">Outline Button</Button>
+      <Button tone="outline">Outline Button</Button>
     </div>
   ),
 };
 
-export const GhostVariant: Story = {
+export const GhostTone: Story = {
   render: () => (
     <div className="flex gap-3">
-      <Button variant="ghost">Ghost Button</Button>
+      <Button tone="ghost">Ghost Button</Button>
     </div>
   ),
 };
 
-export const DangerVariant: Story = {
+export const DangerIntent: Story = {
   render: () => (
     <div className="flex gap-3">
-      <Button variant="danger">Delete</Button>
-      <Button variant="danger" disabled>
+      <Button intent="danger">Delete</Button>
+      <Button intent="danger" tone="ghost">
+        Delete (low emphasis)
+      </Button>
+      <Button intent="danger" disabled>
         Delete (Disabled)
       </Button>
     </div>
@@ -124,7 +150,7 @@ export const FullWidth: Story = {
   render: () => (
     <div className="w-80 space-y-3">
       <Button fullWidth>Full Width Button</Button>
-      <Button fullWidth variant="outline">
+      <Button fullWidth tone="outline">
         Full Width Outline
       </Button>
     </div>
@@ -134,13 +160,13 @@ export const FullWidth: Story = {
 export const ButtonGroup: Story = {
   render: () => (
     <div className="inline-flex rounded-lg overflow-hidden border border-gray-300">
-      <Button variant="ghost" className="rounded-none border-r">
+      <Button tone="ghost" className="rounded-none border-r">
         Left
       </Button>
-      <Button variant="ghost" className="rounded-none border-r">
+      <Button tone="ghost" className="rounded-none border-r">
         Center
       </Button>
-      <Button variant="ghost" className="rounded-none">
+      <Button tone="ghost" className="rounded-none">
         Right
       </Button>
     </div>
@@ -152,15 +178,15 @@ export const CommonActions: Story = {
     <div className="flex flex-col gap-4">
       <div className="flex gap-3">
         <Button>Create New</Button>
-        <Button variant="outline">Cancel</Button>
+        <Button tone="outline">Cancel</Button>
       </div>
       <div className="flex gap-3">
-        <Button variant="secondary">Save Changes</Button>
-        <Button variant="ghost">Discard</Button>
+        <Button tone="ghost">Save Changes</Button>
+        <Button tone="text">Discard</Button>
       </div>
       <div className="flex gap-3">
-        <Button variant="danger">Delete</Button>
-        <Button variant="ghost">Keep</Button>
+        <Button intent="danger">Delete</Button>
+        <Button tone="ghost">Keep</Button>
       </div>
     </div>
   ),
@@ -186,7 +212,7 @@ export const Form: Story = {
         className="w-full px-3 py-2 border rounded-md"
       />
       <div className="flex gap-3 justify-end">
-        <Button variant="outline">Cancel</Button>
+        <Button tone="outline">Cancel</Button>
         <Button>Submit</Button>
       </div>
     </div>

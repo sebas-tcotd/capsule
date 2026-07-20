@@ -43,6 +43,7 @@ docker/postgres/data
 # Environment values
 .env*
 .flaskenv*
+!.env.example
 !.env.project
 !.env.vault
 
@@ -50,6 +51,24 @@ docker/postgres/data
 storybook-static
 
 # --- BMAD & AI Agents ---
+
+# BMAD core (reinstalable)
+_bmad
+
+# Outputs generados (opción más limpia)
+_bmad-output
+
+# IDE / AI tools locales
+.agent
+.claude
+.cursor
+.gemini
+.clinerules
+.augment
+.crush
+.iflow
+.opencode
+
 # Ignorar salidas temporales (mueve lo importante a /docs)
 _bmad-output/
 
