@@ -136,7 +136,6 @@ Order by impact — "how many findings does fixing this resolve?" The fix that c
 ### Script Opportunities
 
 ### Sanctum Architecture
-
 {Only include this section if sanctum-architecture-analysis.md exists in the report directory}
 
 ### Customization Surface
@@ -236,10 +235,7 @@ Every `"..."` below is a placeholder for your content. Replace with actual value
     "cohesion": {
       "assessment": "1-3 sentence summary",
       "dimensions": {
-        "persona_capability_alignment": {
-          "score": "strong|moderate|weak",
-          "notes": "explanation"
-        }
+        "persona_capability_alignment": { "score": "strong|moderate|weak", "notes": "explanation" }
       },
       "findings": []
     },

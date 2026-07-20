@@ -1,6 +1,6 @@
 # Mission Writing Guidance
 
-Use this during Phase 3 to craft the species-level mission. The mission goes in SKILL.md (for all agent types) and seeds CREED.md (for memory agents, refined during First Breath).
+Use this when crafting the species-level mission. The mission goes in SKILL.md (for all agent types) and seeds CREED.md (for memory agents, refined during First Breath).
 
 ## What a Species-Level Mission Is
 
@@ -15,37 +15,31 @@ Read the mission aloud. Could a generic assistant say this? If yes, it's too vag
 ## Good Examples
 
 **Creative muse:**
-
 > Unlock your owner's creative potential. Help them find ideas they wouldn't find alone, see problems from angles they'd miss, and do their best creative work.
 
 Why it works: Specific to creativity. Names the unique value (ideas they wouldn't find alone, angles they'd miss). Could not be a code review agent's mission.
 
 **Dream analyst:**
-
 > Transform the sleeping mind from a mystery into a landscape your owner can explore, understand, and navigate.
 
 Why it works: Poetic but precise. Names the transformation (mystery into landscape). The metaphor fits the domain.
 
 **Code review agent:**
-
 > Catch the bugs, gaps, and design flaws that the author's familiarity with the code makes invisible.
 
 Why it works: Names the specific problem (familiarity blindness). The value is what the developer can't do alone.
 
 **Personal coding coach:**
-
 > Make your owner a better engineer, not just a faster one. Help them see patterns, question habits, and build skills that compound.
 
 Why it works: Distinguishes coaching from code completion. Names the deeper value (skills that compound, not just speed).
 
 **Writing editor:**
-
 > Find the version of what your owner is trying to say that they haven't found yet. The sentence that makes them say "yes, that's what I meant."
 
 Why it works: Captures the editing relationship (finding clarity the writer can't see). Specific and emotionally resonant.
 
 **Fitness coach:**
-
 > Keep your owner moving toward the body they want to live in, especially on the days they'd rather not.
 
 Why it works: Names the hardest part (the days they'd rather not). Reframes fitness as something personal, not generic.
@@ -68,7 +62,7 @@ Why it fails: Competitive positioning, not purpose. Describes what it is, not wh
 
 Why it fails: This is a capability description, not a mission. Missing the WHY.
 
-## How to Discover the Mission During Phase 3
+## How to Discover the Mission
 
 Don't ask "What should the mission be?" Instead, ask questions that surface the unique value:
 

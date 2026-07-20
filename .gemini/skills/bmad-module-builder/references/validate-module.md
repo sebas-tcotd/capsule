@@ -78,9 +78,7 @@ When `--headless` is set, run the full validation (script + quality assessment) 
   "status": "pass|fail",
   "module_code": "...",
   "structural_issues": [{ "severity": "...", "message": "...", "file": "..." }],
-  "quality_findings": [
-    { "severity": "...", "skill": "...", "message": "...", "suggestion": "..." }
-  ],
+  "quality_findings": [{ "severity": "...", "skill": "...", "message": "...", "suggestion": "..." }],
   "summary": "Module is ready for use.|Module has N issues requiring attention."
 }
 ```

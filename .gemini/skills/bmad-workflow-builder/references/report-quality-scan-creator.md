@@ -198,10 +198,7 @@ Every `"..."` below is a placeholder for your content. Replace with actual value
     "cohesion": {
       "assessment": "1-3 sentence summary from cohesion scanner",
       "dimensions": {
-        "stage_flow": {
-          "score": "strong|moderate|weak",
-          "notes": "explanation"
-        }
+        "stage_flow": { "score": "strong|moderate|weak", "notes": "explanation" }
       },
       "findings": []
     },

@@ -60,12 +60,12 @@ Each stage after the first reads the output document to recover context. If comp
 
 ```markdown
 ---
-title: "Analysis: Research Topic"
-status: "analysis"
+title: 'Analysis: Research Topic'
+status: 'analysis'
 inputs:
-  - "{project_root}/docs/brief.md"
-created: "2025-03-02T10:00:00Z"
-updated: "2025-03-02T11:30:00Z"
+  - '{project_root}/docs/brief.md'
+created: '2025-03-02T10:00:00Z'
+updated: '2025-03-02T11:30:00Z'
 ---
 ```
 
