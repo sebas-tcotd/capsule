@@ -1,3 +1,5 @@
+> **📦 Archivado.** La mayoría de este archivo documenta el enfoque CSS-first de Tailwind v4 (`@theme`, `shared-styles.css`) que el proyecto probó y luego revirtió — ver [`docs/decisions/0001-tailwind-v3-vs-v4-tokens.md`](../decisions/0001-tailwind-v3-vs-v4-tokens.md). Dos preguntas siguen siendo guías de decisión válidas hoy, independientemente de esa reversión: [¿Cómo consumir los tokens en nuevas apps?](#-cómo-consumir-los-tokens-en-nuevas-apps) y [¿Debo crear componentes en packages/ui o en apps/web?](#-debo-crear-componentes-en-packagesui-o-en-appsweb). El resto es contexto histórico.
+
 # Preguntas Frecuentes (FAQ)
 
 ## ❓ ¿Por qué exportar desde `dist/` me daba errores?
@@ -457,6 +459,8 @@ No necesitas complejidad enterprise.
 
 ## ❓ ¿Cómo consumir los tokens en nuevas apps?
 
+_Esta pregunta sigue siendo relevante hoy — solo cambia el import de tokens (CSS clásico en vez de `@theme`), el patrón de consumo es el mismo._
+
 ### En Next.js (apps/web)
 
 ```css
@@ -518,6 +522,8 @@ import { Button } from "@capsule/ui";
 
 ## ❓ ¿Debo crear componentes en `packages/ui` o en `apps/web`?
 
+_Esta guía de decisión sigue siendo válida hoy, sin cambios._
+
 ### En `packages/ui` ✅
 
 **Cuándo**: Componentes reutilizables en múltiples apps
@@ -553,6 +559,8 @@ Si solo 1 app lo usa → esa app
 
 ## ❓ ¿Por qué Storybook no funciona con Node 23+?
 
+> Ver [`TROUBLESHOOTING.md`](../../TROUBLESHOOTING.md) para la versión mantenida de este problema.
+
 ### El Problema
 
 **Síntoma**: Storybook 9.1.13 falla al instalar o ejecutarse con Node v23 o superior.
@@ -567,146 +575,15 @@ gyp ERR! build error
 npm ERR! Failed to compile native addon
 ```
 
-### Por Qué Ocurre
-
-#### 1. **Versión muy reciente de Node**
-
-Node 23 fue lanzado en **octubre 2024**. Es tan reciente que muchas herramientas aún no tienen soporte:
-
-- Storybook 9.1.13 (diciembre 2024) fue probado hasta Node 22
-- Las dependencias nativas de Storybook necesitan actualizarse
-- Playwright y otros addons no están compilados para Node 23
-
-#### 2. **Breaking Changes en Node 23**
-
-Node 23 introdujo cambios en:
-
-- **V8 engine**: Nueva versión con APIs modificadas
-- **Native modules**: ABI (Application Binary Interface) cambió
-- **File system**: Cambios en APIs de fs que afectan bundlers
-
-#### 3. **Dependencias Nativas**
-
-Storybook depende de paquetes con código nativo en C++:
-
-```
-@storybook/core
-  └── @swc/core (compilador rápido)
-      └── Bindings nativos para cada versión de Node
-  └── @playwright/browser (navegadores headless)
-      └── Binarios compilados específicos
-```
-
-Estos binarios necesitan **recompilarse** para cada versión major de Node.
-
-#### 4. **Ciclo de Releases**
-
-```
-Node 23 lanzado → octubre 2024
-Storybook 9.1   → diciembre 2024 (testeado con Node 18-22)
-Storybook 9.2   → TBD (probablemente soporte Node 23)
-```
-
-Hay un **delay natural** entre el lanzamiento de Node y el soporte en herramientas.
-
 ### Solución: Usar Node 22 LTS
 
-**Node 22** es la versión LTS (Long Term Support) actual y es totalmente compatible:
-
 ```bash
-# Instalar nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-
-# Instalar Node 22
 nvm install 22.15.0
-
-# Usar en el proyecto
 nvm use 22.15.0
-
-# Verificar
 node -v  # v22.15.0 ✅
 ```
 
-### Automatización con .nvmrc
-
-Ya creamos el archivo `.nvmrc` en la raíz del proyecto:
-
-```bash
-# .nvmrc
-22.15.0
-```
-
-**Uso**:
-
-```bash
-cd /path/to/capsule
-nvm use  # Lee .nvmrc automáticamente
-```
-
-**Auto-switch (opcional)**:
-
-Agrega esto a tu `~/.zshrc` o `~/.bashrc`:
-
-```bash
-# Auto-switch Node version con nvm
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
-```
-
-Ahora al entrar a la carpeta del proyecto, nvm cambiará automáticamente a Node 22.
-
-### Alternativas a nvm
-
-#### **fnm** (Fast Node Manager - Rust)
-
-```bash
-# Instalar fnm (más rápido que nvm)
-curl -fsSL https://fnm.vercel.app/install | bash
-
-# Usar
-fnm install 22.15.0
-fnm use 22.15.0
-
-# Auto-switch con .nvmrc
-eval "$(fnm env --use-on-cd)"
-```
-
-#### **volta** (Otra alternativa rápida)
-
-```bash
-# Instalar volta
-curl https://get.volta.sh | bash
-
-# Fijar versión para el proyecto
-volta pin node@22.15.0
-```
-
-### ¿Cuándo podrás usar Node 23+?
-
-Espera a que:
-
-1. **Storybook 9.2+** lance soporte oficial
-2. **Todas las dependencias** actualicen sus binarios nativos
-3. **La comunidad** reporte que es estable
-
-**Estimado**: Q2 2025 (abril-junio)
-
-Por ahora, **Node 22 LTS es la opción segura y recomendada** ✅
+Detalle completo (causas técnicas, alternativas a nvm) en la versión original de este archivo — conservado tal cual en el historial de git.
 
 ---
 
@@ -714,17 +591,15 @@ Por ahora, **Node 22 LTS es la opción segura y recomendada** ✅
 
 Si tienes más preguntas, puedes:
 
-1. **Revisar la documentación**:
-   - `ARCHITECTURE.md` - Decisiones arquitectónicas
-   - `SETUP.md` - Estado actual
-   - `packages/ui/STRUCTURE.md` - Estructura de componentes
+1. **Revisar la documentación actual**:
+   - [`README.md`](../../README.md) — estado del proyecto, tech stack, getting started
+   - [`ARCHITECTURE.md`](../../ARCHITECTURE.md) — decisión fuente vs. compilado
+   - `packages/ui/STRUCTURE.md` — estructura de componentes
 
 2. **Consultar ejemplos**:
    - Mira `Button.tsx` como referencia
    - Sigue el patrón para nuevos componentes
 
 3. **Experimentar**:
-   - Crea un componente pequeño (Badge, Avatar)
+   - Crea un componente pequeño
    - Sigue el checklist en `STRUCTURE.md`
-
-¡Buena suerte! 🚀

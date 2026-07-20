@@ -497,17 +497,18 @@ git stash pop
 
 ## 📚 Recursos Adicionales
 
-- **FAQ.md**: Preguntas frecuentes con explicaciones detalladas
-- **SETUP.md**: Estado actual y configuración completa
+- **README.md**: Estado actual, tech stack, y comandos
 - **ARCHITECTURE.md**: Decisiones técnicas y por qué
-- **GitHub Issues**: https://github.com/tu-repo/issues
+- **docs/decisions/**: Architecture Decision Records
+- **docs/archive/FAQ.md**: Preguntas frecuentes históricas (Tailwind v4, dist vs. source)
+- **GitHub Issues**: https://github.com/sebas-tcotd/capsule/issues
 
 ---
 
 ## 💬 ¿Nada de esto funciona?
 
 1. Verifica que seguiste todos los pasos exactamente
-2. Lee `FAQ.md` para entender el "por qué"
+2. Lee `docs/archive/FAQ.md` para el razonamiento histórico detrás de estas decisiones
 3. Busca el error exacto en Google/StackOverflow
 4. Crea un issue en GitHub con:
    - Node version (`node -v`)

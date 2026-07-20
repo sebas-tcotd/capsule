@@ -1,378 +1,230 @@
 # Capsule
 
-A modern monorepo built with Turborepo, TypeScript, and Next.js.
+[![CI](https://github.com/sebas-tcotd/capsule/actions/workflows/ci.yml/badge.svg)](https://github.com/sebas-tcotd/capsule/actions/workflows/ci.yml)
+![Status](https://img.shields.io/badge/status-pre--product-orange)
 
-## What's inside?
+**Capsule turns a physical wardrobe into a searchable, AI-assisted inventory** — so getting dressed, avoiding duplicate purchases, and rediscovering unused clothes stops depending on memory. This repository is the TypeScript monorepo for the product: a Next.js web app backed by Postgres, built on a Clean Architecture core, with a standalone design system.
 
-This Turborepo includes the following packages/apps:
+> **Status: pre-product.** The monorepo tooling, Docker environment, and design system below are real and working. The wardrobe app itself — auth, garment inventory, outfit suggestions — has not been built yet. The [Project Map](#project-map) below shows exactly what exists vs. what's a placeholder.
 
-### Apps and Packages
+## Why Capsule exists
 
-- `web`: a [Next.js](https://nextjs.org/) app
-- `@capsule/ui`: a React component library shared across applications
-- `@capsule/eslint-config`: ESLint configurations (includes Next.js, React, and Prettier integration)
-- `@capsule/typescript-config`: Shared `tsconfig.json` files used throughout the monorepo
-- `@capsule/domain`: Domain logic and business rules
+People own more clothing than they actively use — most wardrobes go largely unworn most of the time — which shows up as morning decision fatigue, duplicate or incompatible purchases, and the feeling of "nothing to wear" despite a full closet. Capsule's answer, per the product brief, is **"shop your own closet"**: catalog what you own (photo capture + AI recognition), surface it contextually (weather, calendar, what you haven't worn in months), and let AI expand your options rather than dictate them.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/) with strict mode enabled.
+That direction isn't a guess — it came out of a structured discovery pass (problem statement, target users, competitive gaps, differentiation thesis) done before any product code was written. Full writeup in [`docs/project-overview.md`](./docs/project-overview.md) and [`docs/internal/product-brief.md`](./docs/internal/product-brief.md).
 
-### Tech Stack
+## Project Map
 
-- **[TypeScript](https://www.typescriptlang.org/)** - Static type checking (strict mode)
-- **[ESLint](https://eslint.org/)** - Code linting
-- **[Prettier](https://prettier.io)** - Code formatting
-- **[Husky](https://typicode.github.io/husky/)** - Git hooks
-- **[lint-staged](https://github.com/okonet/lint-staged)** - Run linters on staged files
-- **[commitlint](https://commitlint.js.org/)** - Enforce conventional commits
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[Turborepo](https://turbo.build/repo)** - Monorepo build system
-- **[PostgreSQL](https://www.postgresql.org/)** - Production-ready database
-- **[Docker](https://www.docker.com/)** - Containerization for development and deployment
+| Path                         | Purpose                                                             | Status                                                                                                                                                    |
+| ---------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web`                   | Next.js 16 (App Router) — the eventual product surface              | 🔴 Unmodified `create-next-app` template. No auth, routes, or business UI                                                                                 |
+| `apps/docs`                  | Storybook 9 — documents `@capsule/ui`                               | ✅ Working — see [Demo](#the-closest-thing-to-a-demo) below                                                                                               |
+| `packages/ui`                | React design system, Atomic Design, CVA variants                    | ✅ 13 atoms shipped: Button, Input, Checkbox, Radio, Switch, Avatar, Badge, Tag, Divider, Link, Spinner, Skeleton, IconButton — each with tests + stories |
+| `packages/domain`            | Framework-free business logic (entities, use cases)                 | 🔴 Placeholder — one `DomainError` class, nothing else                                                                                                    |
+| `packages/db`                | Drizzle ORM schemas + database access                               | 🔴 Placeholder — no schema, no migrations, no client                                                                                                      |
+| `packages/validators`        | Shared Zod validation schemas                                       | 🔴 Placeholder — dependency installed, no schemas defined                                                                                                 |
+| `packages/tailwind-config`   | Shared Tailwind theme (color, type, spacing, radius, shadow tokens) | ✅ Working                                                                                                                                                |
+| `packages/eslint-config`     | Shared ESLint configs (base, Next.js, React library, design system) | ✅ Working                                                                                                                                                |
+| `packages/typescript-config` | Shared `tsconfig.json` bases                                        | ✅ Working                                                                                                                                                |
+| —                            | Monorepo tooling: Turborepo, pnpm workspaces, Husky, commitlint, CI | ✅ Working                                                                                                                                                |
+| —                            | Auth, state management (Zustand), AI recognition pipeline           | 🔴 Architectural decisions on record in `project-context.md`, no code yet                                                                                 |
+
+If you're picking up work here: `packages/ui` is what to read for this repo's code-quality bar. Everything else is scaffolding waiting on the domain model.
+
+### What's actually connected right now
+
+```mermaid
+graph TD
+    subgraph "Working"
+        Docs["apps/docs (Storybook)"]
+        UI["packages/ui — 13 atoms"]
+        TW["packages/tailwind-config"]
+        PG[("Postgres 16 — Docker")]
+    end
+    subgraph "Placeholders — no logic yet"
+        Domain["packages/domain"]
+        DB["packages/db"]
+        Val["packages/validators"]
+    end
+    Web["apps/web (Next.js template)"]
+
+    Docs --> UI
+    UI --> TW
+    Web -.not imported.-> UI
+    Web -.not connected.-> PG
+    DB -.would connect.-> PG
+```
+
+`apps/web` doesn't import `@capsule/ui` yet, and nothing in the app talks to Postgres yet. The design system and the Docker database are both real and independently working — they just aren't wired into the product surface.
+
+### The closest thing to a demo
+
+There's no product UI to screenshot yet, but `packages/ui` is real and running:
+
+```bash
+pnpm --filter docs dev   # → http://localhost:6006
+```
+
+That renders all 13 shipped components live, with every variant, size, and state as an interactive story.
+
+## Tech stack
+
+| Layer              | Choice                                                                                                                                    |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Monorepo           | Turborepo 2.5, pnpm workspaces                                                                                                            |
+| Language           | TypeScript 5.9 (strict mode everywhere)                                                                                                   |
+| Web framework      | Next.js 16 (App Router), React 19                                                                                                         |
+| Styling            | Tailwind CSS 3.4 — shared JS theme config, **not** CSS-first `@theme` (see [ADR 0001](./docs/decisions/0001-tailwind-v3-vs-v4-tokens.md)) |
+| Component variants | class-variance-authority (CVA) + `tailwind-merge`                                                                                         |
+| Design system docs | Storybook 9 (Vite builder)                                                                                                                |
+| Database           | PostgreSQL 16 via Docker; Drizzle ORM planned, not yet wired up                                                                           |
+| Validation         | Zod, installed, no schemas yet                                                                                                            |
+| Testing            | Vitest + Testing Library (`packages/ui` only, 15 test files); Playwright planned for E2E                                                  |
+| Lint/format        | ESLint 9, Prettier, Husky + lint-staged, commitlint (Conventional Commits)                                                                |
+
+Every internal package exports **TypeScript source directly** (`"exports": { ".": "./src/index.ts" }`) instead of a compiled `dist/`, since consuming apps already bundle TypeScript — one less build step, instant hot reload across package boundaries. Full rationale in [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+**A decision that got reversed:** the design tokens originally shipped as a CSS-first `@theme` setup (Tailwind v4 style). It got reverted in favor of a conventional `tailwind.config.js` — see [`docs/decisions/0001-tailwind-v3-vs-v4-tokens.md`](./docs/decisions/0001-tailwind-v3-vs-v4-tokens.md) for what changed and what's on record about why.
+
+## How the design system is built
+
+`packages/ui` is the one part of this repo that's finished, not scaffolded, so it's the fastest way to see the actual code-quality bar. Every one of the 13 atoms follows the same shape:
+
+```tsx
+// packages/ui/src/components/atoms/Button/Button.tsx
+const buttonVariants = cva(
+  ["inline-flex items-center justify-center gap-2", "squircle rounded-xl font-medium transition-colors", /* … */],
+  {
+    variants: {
+      variant: { primary: [...], secondary: [...], outline: [...], ghost: [...], danger: [...] },
+      size: { sm: "h-9 px-3 text-sm", md: "h-11 px-6 text-base", lg: "h-14 px-8 text-lg" },
+    },
+    defaultVariants: { variant: "primary", size: "md", fullWidth: false },
+  },
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  isLoading?: boolean;
+}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => { /* … */ });
+Button.displayName = createDisplayName("Button", "atom");
+```
+
+What that pattern buys, applied consistently across all 13 components:
+
+- **Typed variants, not string props** — `variant`/`size` are inferred from `cva()` via `VariantProps`, so an invalid variant is a compile error, not a runtime CSS miss.
+- **`forwardRef` everywhere** — every atom is usable with refs (focus management, form libraries, animation) without exceptions to remember.
+- **Native HTML props pass through** — `ButtonProps extends ButtonHTMLAttributes<...>`, so nothing about the underlying `<button>` is hidden from the consumer.
+- **`createDisplayName()`** gives every component a real, debuggable name in React DevTools instead of `ForwardRef(Anonymous)`.
+- **Accessibility is checked at build time**, not left to review — Storybook runs `@storybook/addon-a11y` against every story.
+- **Every atom ships with its test and its story** — `Button.tsx`, `Button.test.tsx`, `Button.stories.tsx` live together; there's no "component exists but nobody wrote the story" gap.
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Node.js v22.15.0 (LTS)** ⚠️ **IMPORTANTE: Usa Node 22. Storybook NO funciona con Node 23+**
-- **pnpm 9.0.0** or higher
-- **Docker & Docker Compose** (for database and containerized development)
+- **Node.js 22.15.0** — pinned in [`.nvmrc`](./.nvmrc), required for Storybook 9's native dependencies. **Note:** CI (`ci.yml`) and `Dockerfile` currently run on Node 18 instead — neither of those runs Storybook, so it hasn't caused a documented failure, but the two numbers are unreconciled. If `pnpm install` fails with native-binary/`gyp` errors, you're likely on an incompatible Node version — see [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md#problema-1-storybook-no-instala-o-falla-node-23).
+- **pnpm ≥ 9.0.0**
+- **Docker & Docker Compose** — only needed for the Postgres environment; the design system and Storybook run without it.
 
-#### Node Version Management
-
-Este proyecto requiere Node 22. Si tienes Node 23+, usa nvm para cambiar:
+### Quickstart
 
 ```bash
-# Instalar nvm (si no lo tienes)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-
-# Instalar Node 22
-nvm install 22.15.0
-
-# El proyecto incluye .nvmrc, simplemente ejecuta:
-nvm use
-
-# Verificar versión
-node -v  # Debe mostrar v22.15.0
-```
-
-**¿Por qué Node 22?** Storybook 9.1.13 no es compatible con Node 23+ debido a dependencias nativas. Ver `FAQ.md` para más detalles.
-
-### Local Development (without Docker)
-
-```bash
-# Install dependencies
+nvm use && corepack enable
 pnpm install
 
-# Start development server
-pnpm dev
-
-# Build all apps and packages
-pnpm build
-
-# Run linting
-pnpm lint
-
-# Run type checking
-pnpm check-types
-
-# Format code
-pnpm format
+pnpm --filter docs dev      # Storybook (the design system) → http://localhost:6006
 ```
 
-### Docker Development Setup (Recommended)
-
-Docker provides an isolated development environment with PostgreSQL database.
-
-#### Quick Start
+To also run the web app (currently the unmodified Next.js template):
 
 ```bash
-# 1. Copy environment variables
+cp .env.example .env        # non-secret local defaults, edit if needed
+pnpm dev --filter=web       # → http://localhost:3000
+```
+
+### With Docker (adds PostgreSQL)
+
+```bash
 cp .env.example .env
-
-# 2. Start all services (database + app)
-docker compose up -d
-
-# 3. View logs
-docker compose logs -f web
-
-# 4. Stop all services
-docker compose down
+docker compose up -d                     # web (:3000) + postgres (:5432)
+docker compose --profile tools up -d     # + pgAdmin at :5050 (admin@capsule.local / admin)
 ```
-
-#### Available Services
-
-- **web**: Next.js application (http://localhost:3000)
-- **postgres**: PostgreSQL database (localhost:5432)
-- **pgadmin**: Database management UI (http://localhost:5050) - Optional
-
-#### Start pgAdmin (Database UI)
-
-```bash
-# Start with pgadmin
-docker compose --profile tools up -d
-
-# Access pgAdmin at http://localhost:5050
-# Email: admin@capsule.local
-# Password: admin
-```
-
-#### Useful Docker Commands
-
-```bash
-# Start services
-docker compose up -d              # Start in background
-docker compose up                 # Start with logs
-
-# Stop services
-docker compose down               # Stop and remove containers
-docker compose down -v            # Stop and remove volumes (deletes database data)
-
-# View logs
-docker compose logs -f            # Follow all logs
-docker compose logs -f web        # Follow web app logs
-docker compose logs -f postgres   # Follow database logs
-
-# Restart a service
-docker compose restart web
-docker compose restart postgres
-
-# Execute commands inside containers
-docker compose exec web pnpm lint           # Run lint inside container
-docker compose exec postgres psql -U capsule -d capsule_dev  # Access database CLI
-
-# Rebuild containers
-docker compose build              # Rebuild all
-docker compose build web          # Rebuild web only
-docker compose up -d --build      # Rebuild and start
-```
-
-#### Database Access
-
-**Connection String:**
-
-```
-postgresql://capsule:capsule_dev_password@localhost:5432/capsule_dev
-```
-
-**Using psql CLI:**
 
 ```bash
 docker compose exec postgres psql -U capsule -d capsule_dev
+# postgresql://capsule:capsule_dev_password@localhost:5432/capsule_dev
 ```
 
-**Using pgAdmin:**
+A `Makefile` wraps the common Docker commands — run `make help` for the full list (`make dev`, `make up`, `make down`, `make db-shell`, `make db-reset`).
 
-1. Start pgAdmin: `docker compose --profile tools up -d`
-2. Open http://localhost:5050
-3. Login with credentials from `.env`
-4. Add server:
-   - Host: `postgres`
-   - Port: `5432`
-   - Database: `capsule_dev`
-   - Username: `capsule`
-   - Password: `capsule_dev_password`
-
-#### Environment Variables
-
-This project uses [Dotenv Vault](https://www.dotenv.org/docs/security/env-vault) for secure environment variable management.
-
-**For team members with vault access:**
+### Everyday commands
 
 ```bash
-# Login to dotenv vault
-npx dotenv-vault login
+pnpm dev                        # all apps in dev mode
+pnpm build                      # build everything
+pnpm lint                       # ESLint, all workspaces
+pnpm check-types                # tsc --noEmit, all workspaces
+pnpm format                     # Prettier write
 
-# Pull environment variables
-npx dotenv-vault pull
+pnpm --filter ui test           # @capsule/ui's Vitest suite (not yet run in CI — run before touching packages/ui)
+pnpm --filter ui test:coverage
 ```
 
-**For local development without vault:**
-
-```bash
-# Copy example file
-cp .env.example .env
-
-# Edit .env with your local values
-```
-
-**Key variables:**
-
-- `POSTGRES_USER`: Database user
-- `POSTGRES_PASSWORD`: Database password
-- `POSTGRES_DB`: Database name
-- `DATABASE_URL`: Full connection string
-- `WEB_PORT`: Port for web application
-
-**Note:** The `.env.vault` file is encrypted and safe to commit to Git. Your local `.env` file is gitignored.
-
-## Development Workflow
-
-This project follows **GitHub Flow** for branch management:
-
-### Branching Strategy
-
-```
-main (protected branch - always deployable)
-  ↑
-  └── feat/feature-name      # New features
-  └── fix/bug-description    # Bug fixes
-  └── chore/task-name        # Maintenance tasks
-  └── refactor/description   # Code refactoring
-  └── docs/description       # Documentation updates
-```
-
-### Branch Naming Convention
-
-- `feat/description` - New features or enhancements
-- `fix/description` - Bug fixes
-- `chore/description` - Maintenance tasks (deps, configs, etc.)
-- `refactor/description` - Code refactoring without functionality changes
-- `docs/description` - Documentation updates
-
-### Workflow Steps
-
-1. **Create a feature branch from `main`**
-
-   ```bash
-   git checkout main
-   git pull origin main
-   git checkout -b feat/your-feature-name
-   ```
-
-2. **Make your changes and commit**
-   - Commits must follow [Conventional Commits](https://www.conventionalcommits.org/)
-   - Examples: `feat: add user authentication`, `fix: resolve login bug`
-   - commitlint will validate your commit messages
-
-3. **Push your branch**
-
-   ```bash
-   git push -u origin feat/your-feature-name
-   ```
-
-4. **Open a Pull Request**
-   - Go to GitHub and create a PR to `main`
-   - CI will automatically run (lint, type-check, format-check)
-   - All checks must pass before merging
-
-5. **Merge to main**
-   - Merge the PR once approved and all checks pass
-   - Delete the feature branch after merging
-
-### Commit Message Format
-
-We use [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-<type>(<scope>): <subject>
-
-Types:
-  feat:     New feature
-  fix:      Bug fix
-  docs:     Documentation changes
-  style:    Code style changes (formatting, etc.)
-  refactor: Code refactoring
-  test:     Adding or updating tests
-  chore:    Maintenance tasks
-```
-
-**Examples:**
-
-```bash
-git commit -m "feat: add user profile page"
-git commit -m "fix: resolve navigation bug on mobile"
-git commit -m "chore: update dependencies"
-```
-
-## Branch Protection
-
-The `main` branch is protected with the following rules:
-
-- ✅ Requires pull request before merging
-- ✅ Requires status checks to pass (CI must pass)
-- ✅ Requires branches to be up to date before merging
-- ❌ No direct pushes to `main`
-
-## CI/CD
-
-GitHub Actions automatically runs on every push and pull request:
-
-- **Lint**: ESLint validation across all workspaces
-- **Type Check**: TypeScript type validation
-- **Format Check**: Prettier format validation
-
-See `.github/workflows/ci.yml` for configuration.
-
-## Pre-commit Hooks
-
-Husky runs automatically before each commit:
-
-- **lint-staged**: Formats staged files with Prettier
-- **commitlint**: Validates commit message format
-
-## Project Structure
+## Repository structure
 
 ```
 capsule/
 ├── apps/
-│   └── web/              # Next.js application
+│   ├── web/                 # Next.js app (product surface)
+│   └── docs/                # Storybook for @capsule/ui
 ├── packages/
-│   ├── ui/               # Shared React components
-│   ├── domain/           # Business logic
-│   ├── eslint-config/    # Shared ESLint configs
-│   └── typescript-config/# Shared TypeScript configs
-├── .github/
-│   └── workflows/        # GitHub Actions workflows
-└── turbo.json           # Turborepo configuration
+│   ├── ui/                  # Design system (13 atoms, tokens, utils)
+│   ├── domain/               # Business logic (placeholder)
+│   ├── db/                   # Drizzle schemas (placeholder)
+│   ├── validators/            # Zod schemas (placeholder)
+│   ├── tailwind-config/       # Shared design tokens
+│   ├── eslint-config/         # Shared lint rules
+│   └── typescript-config/     # Shared tsconfig bases
+├── docker/                  # Postgres init/seed SQL
+├── docs/                    # Product & architecture docs (generated via BMAD)
+├── .github/workflows/       # CI
+└── turbo.json                # Turborepo task graph
 ```
 
-## Useful Commands
+## Development workflow & contributing
 
-```bash
-# Development
-pnpm dev                 # Start all apps in dev mode
-pnpm dev --filter=web    # Start only web app
+GitHub Flow, Conventional Commits (enforced by commitlint), CI checks, and where to find component/architecture conventions are all documented in [`CONTRIBUTING.md`](./CONTRIBUTING.md). Solo-founder project, not yet open to outside contributions — but the same rules apply internally, enforced by tooling rather than left to memory.
 
-# Building
-pnpm build               # Build all apps and packages
-pnpm build --filter=web  # Build only web app
+## License
 
-# Code Quality
-pnpm lint                # Run ESLint
-pnpm check-types         # Run TypeScript compiler
-pnpm format              # Format all files with Prettier
+No `LICENSE` file exists yet, and every workspace is marked `"private": true`. Treat this as **all rights reserved / not licensed for reuse** until that changes.
 
-# Git Hooks
-pnpm prepare             # Install Husky hooks
-```
+## Documentation map
 
-## 📚 Documentation
+| Document                                                             | Covers                                                                                       |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md)                               | Workflow, commit conventions, CI, where to find component/architecture rules                 |
+| [`ARCHITECTURE.md`](./ARCHITECTURE.md)                               | Source-vs-compiled package exports — the one architectural rationale still fully current     |
+| [`docs/decisions/`](./docs/decisions/)                               | Architecture Decision Records — currently one, on the Tailwind v3/v4 reversal                |
+| [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)                         | Step-by-step fixes for common local setup issues                                             |
+| [`docs/archive/`](./docs/archive/)                                   | Retired docs (old `SETUP.md`, `FAQ.md`) kept for historical context — not current references |
+| [`docs/project-overview.md`](./docs/project-overview.md)             | Product vision, tech stack snapshot, roadmap (Spanish)                                       |
+| [`docs/internal/product-brief.md`](./docs/internal/product-brief.md) | Problem statement, target users, differentiators (Spanish)                                   |
+| [`packages/ui/README.md`](./packages/ui/README.md)                   | Design system overview                                                                       |
+| [`packages/ui/STRUCTURE.md`](./packages/ui/STRUCTURE.md)             | Component file structure and conventions                                                     |
+| [`packages/ui/CONTRIBUTING.md`](./packages/ui/CONTRIBUTING.md)       | How to add a new component                                                                   |
 
-### Project Documentation
+## Roadmap
 
-- **[SETUP.md](./SETUP.md)** - Complete current setup and configuration
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical decisions and architecture
-- **[FAQ.md](./FAQ.md)** - Frequently asked questions with detailed explanations
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Problem-solving guide
+Near-term (per `docs/project-overview.md`):
 
-### Package-Specific Documentation
+1. Define domain entities (`User`, `Garment`, `Outfit`) in `packages/domain`
+2. Design the Postgres schema and wire up Drizzle in `packages/db`
+3. Build the first real pages in `apps/web` (auth, wardrobe dashboard)
+4. Expand `packages/ui` into Molecules/Organisms as `apps/web` needs them
 
-- **[packages/ui/README.md](./packages/ui/README.md)** - Component library overview
-- **[packages/ui/STRUCTURE.md](./packages/ui/STRUCTURE.md)** - Component structure guide
-- **[packages/ui/CONTRIBUTING.md](./packages/ui/CONTRIBUTING.md)** - Contribution guidelines
-- **[packages/tailwind-config/README.md](./packages/tailwind-config/README.md)** - Design tokens documentation
-
-### Key Topics
-
-- **Node Version**: See [FAQ.md](./FAQ.md#por-qué-storybook-no-funciona-con-node-23) for why we use Node 22
-- **Tailwind v4**: See [ARCHITECTURE.md](./ARCHITECTURE.md#configuración-de-tailwind-v4) for v3 vs v4 differences
-- **Source vs Dist**: See [ARCHITECTURE.md](./ARCHITECTURE.md#decisión-exportar-código-fuente-vs-código-compilado) for why we export source files
-
-## Learn More
-
-- [Turborepo Documentation](https://turbo.build/repo/docs)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS v4](https://tailwindcss.com/docs/v4-beta)
-- [Storybook Documentation](https://storybook.js.org/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+Longer-term: AI garment recognition, outfit recommendation, Zustand-based client state, and CI test coverage.

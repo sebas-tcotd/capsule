@@ -1,3 +1,5 @@
+> **📦 Archivado.** Este documento es un snapshot del estado del proyecto a enero 2025 (ver fecha al final). El estado actual y actualizado vive en el [Project Map del README](../../README.md#project-map) y en las [tablas de Tech stack](../../README.md#tech-stack). Las secciones de tokens/Tailwind aquí describen `shared-styles.css` con `@theme` (v4 CSS-first), un enfoque que el proyecto **abandonó** — ver [`docs/decisions/0001-tailwind-v3-vs-v4-tokens.md`](../decisions/0001-tailwind-v3-vs-v4-tokens.md). Se conserva este archivo como registro histórico, no como referencia activa.
+
 # Setup Actual del Monorepo Capsule
 
 Este documento resume el estado actual de la configuración y cómo todo está conectado.
@@ -287,6 +289,8 @@ pnpm build:css  # Si no está en watch mode
 
 ## ⚠️ Problemas Comunes y Soluciones
 
+> Ver [`TROUBLESHOOTING.md`](../../TROUBLESHOOTING.md) para la versión mantenida de esta sección.
+
 ### 0. "Storybook no instala o falla al iniciar" (Node 23+)
 
 **Síntoma**: Errores durante `pnpm install` o al ejecutar `pnpm dev` en Storybook.
@@ -412,4 +416,4 @@ pnpm build:css
 ---
 
 **Última actualización**: 2025-01-19
-**Estado**: ✅ Funcionando correctamente
+**Estado**: ✅ Funcionando correctamente (snapshot histórico — ver nota al inicio del archivo)

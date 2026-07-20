@@ -43,6 +43,7 @@ docker/postgres/data
 # Environment values
 .env*
 .flaskenv*
+!.env.example
 !.env.project
 !.env.vault
 
