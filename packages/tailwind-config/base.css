@@ -61,13 +61,13 @@
     @apply text-neutral-400;
   }
 
-  /* Semantic background colors */
+  /* Semantic background colors — Premium Studio: bone canvas, greige surface */
   .bg-background {
-    @apply bg-neutral-50;
+    @apply bg-bone;
   }
 
   .bg-surface {
-    @apply bg-white;
+    @apply bg-greige;
   }
 
   /* Focus ring utility */

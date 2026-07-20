@@ -3,43 +3,38 @@ import { forwardRef } from "react";
 import { cn } from "../../../utils";
 import { createDisplayName } from "../../../utils/displayName";
 
+/**
+ * Button variants: `intent` (semantic meaning) x `tone` (visual treatment),
+ * the same two-axis pattern Badge/Tag already use via `colorScheme` x `variant`.
+ * See docs/ui-component-inventory.md "Convención de variantes: Intent x Tone".
+ *
+ * Maps onto the UX spec's three-tier "Button Hierarchy (Tactile Luxury)":
+ * Primary/Deploy = intent="primary" tone="solid"
+ * Secondary/Choice = intent="primary" tone="ghost"
+ * Tertiary/Support = tone="text" (any intent)
+ */
 const buttonVariants = cva(
   // Base styles
   [
     "inline-flex items-center justify-center gap-2",
-    "squircle rounded-xl font-medium transition-colors",
+    "squircle rounded-xl font-medium transition-all",
+    "active:scale-[0.98]", // Soft Scale Feedback — see ux-design-specification.md "Material Direction Refinement"
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
     "cursor-auto",
   ],
   {
     variants: {
-      variant: {
-        primary: [
-          "bg-primary-500 text-white",
-          "hover:bg-primary-600",
-          "focus-visible:ring-primary-500",
-        ],
-        secondary: [
-          "bg-accent-500 text-white",
-          "hover:bg-accent-600",
-          "focus-visible:ring-accent-500",
-        ],
-        outline: [
-          "border-2 border-primary-500 text-primary-500 bg-transparent",
-          "hover:bg-primary-50",
-          "focus-visible:ring-primary-500",
-        ],
-        ghost: [
-          "text-primary-500 bg-transparent",
-          "hover:bg-neutral-100",
-          "focus-visible:ring-primary-500",
-        ],
-        danger: [
-          "bg-error-500 text-white",
-          "hover:bg-error-600",
-          "focus-visible:ring-error-500",
-        ],
+      intent: {
+        primary: "",
+        neutral: "",
+        danger: "",
+      },
+      tone: {
+        solid: "",
+        outline: "",
+        ghost: "",
+        text: "",
       },
       size: {
         sm: "h-9 px-3 text-sm",
@@ -51,8 +46,90 @@ const buttonVariants = cva(
         false: "",
       },
     },
+    compoundVariants: [
+      // ---- Solid: selective New Neumorphism (shadow-studio + precision border) ----
+      {
+        intent: "primary",
+        tone: "solid",
+        className:
+          "bg-primary-500 text-white hover:bg-primary-600 border border-primary-700 shadow-studio focus-visible:ring-primary-500",
+      },
+      {
+        intent: "neutral",
+        tone: "solid",
+        className:
+          "bg-neutral-700 text-white hover:bg-neutral-800 border border-neutral-800 shadow-studio focus-visible:ring-neutral-500",
+      },
+      {
+        intent: "danger",
+        tone: "solid",
+        className:
+          "bg-error-500 text-white hover:bg-error-600 border border-error-700 shadow-studio focus-visible:ring-error-500",
+      },
+
+      // ---- Outline: 1px precision border, no fill ----
+      {
+        intent: "primary",
+        tone: "outline",
+        className:
+          "border border-primary-500 text-primary-600 bg-transparent hover:bg-primary-50 focus-visible:ring-primary-500",
+      },
+      {
+        intent: "neutral",
+        tone: "outline",
+        className:
+          "border border-neutral-400 text-neutral-700 bg-transparent hover:bg-neutral-100 focus-visible:ring-neutral-500",
+      },
+      {
+        intent: "danger",
+        tone: "outline",
+        className:
+          "border border-error-500 text-error-600 bg-transparent hover:bg-error-50 focus-visible:ring-error-500",
+      },
+
+      // ---- Ghost: Glassmorphism (translucent + backdrop-blur) ----
+      {
+        intent: "primary",
+        tone: "ghost",
+        className:
+          "text-primary-700 bg-primary-50/60 backdrop-blur-md border border-primary-500/20 hover:bg-primary-50/80 focus-visible:ring-primary-500",
+      },
+      {
+        intent: "neutral",
+        tone: "ghost",
+        className:
+          "text-neutral-700 bg-white/50 backdrop-blur-md border border-neutral-300/40 hover:bg-white/70 focus-visible:ring-neutral-500",
+      },
+      {
+        intent: "danger",
+        tone: "ghost",
+        className:
+          "text-error-700 bg-error-50/60 backdrop-blur-md border border-error-500/20 hover:bg-error-50/80 focus-visible:ring-error-500",
+      },
+
+      // ---- Text: Tertiary/Support — no chrome, light weight, wide tracking ----
+      {
+        intent: "primary",
+        tone: "text",
+        className:
+          "text-primary-700 bg-transparent font-light tracking-wide hover:text-primary-800 focus-visible:ring-primary-500",
+      },
+      {
+        intent: "neutral",
+        tone: "text",
+        className:
+          "text-neutral-600 bg-transparent font-light tracking-wide hover:text-neutral-800 focus-visible:ring-neutral-500",
+      },
+      {
+        intent: "danger",
+        tone: "text",
+        className:
+          "text-error-600 bg-transparent font-light tracking-wide hover:text-error-700 focus-visible:ring-error-500",
+      },
+    ],
     defaultVariants: {
-      variant: "primary",
+      intent: "primary",
+      tone: "solid",
       size: "md",
       fullWidth: false,
     },
@@ -75,7 +152,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
-      variant,
+      intent,
+      tone,
       size,
       fullWidth,
       isLoading = false,
@@ -88,7 +166,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={cn(buttonVariants({ variant, size, fullWidth, className }))}
+        className={cn(
+          buttonVariants({ intent, tone, size, fullWidth, className }),
+        )}
         disabled={disabled || isLoading}
         {...props}
       >

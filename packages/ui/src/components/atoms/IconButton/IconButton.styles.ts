@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const iconButtonVariants = cva(
   [
     "inline-flex items-center justify-center",
-    "font-medium transition-colors",
+    "font-medium transition-all active:scale-[0.98]",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
@@ -31,30 +31,31 @@ export const iconButtonVariants = cva(
       },
     },
     compoundVariants: [
-      // Solid variants
+      // Solid variants — selective New Neumorphism (shadow-studio + precision
+      // border), same treatment as Button's solid variants.
       {
         variant: "solid",
         colorScheme: "primary",
         className:
-          "bg-primary-500 text-white hover:bg-primary-600 focus-visible:ring-primary-500",
+          "bg-primary-500 text-white hover:bg-primary-600 border border-primary-700 shadow-studio focus-visible:ring-primary-500",
       },
       {
         variant: "solid",
         colorScheme: "accent",
         className:
-          "bg-accent-500 text-white hover:bg-accent-600 focus-visible:ring-accent-500",
+          "bg-accent-500 text-white hover:bg-accent-600 border border-accent-700 shadow-studio focus-visible:ring-accent-500",
       },
       {
         variant: "solid",
         colorScheme: "error",
         className:
-          "bg-error-500 text-white hover:bg-error-600 focus-visible:ring-error-500",
+          "bg-error-500 text-white hover:bg-error-600 border border-error-700 shadow-studio focus-visible:ring-error-500",
       },
       {
         variant: "solid",
         colorScheme: "neutral",
         className:
-          "bg-neutral-500 text-white hover:bg-neutral-600 focus-visible:ring-neutral-500",
+          "bg-neutral-500 text-white hover:bg-neutral-600 border border-neutral-700 shadow-studio focus-visible:ring-neutral-500",
       },
       // Outline variants
       {

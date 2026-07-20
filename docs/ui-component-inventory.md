@@ -3,7 +3,7 @@
 **Generado:** 2026-01-17
 **Parte:** packages/ui
 **Tipo:** Biblioteca de Componentes (Atomic Design)
-**Total de Componentes:** 13 Atoms, 0 Molecules, 0 Organisms
+**Total de Componentes:** 13 Atoms implementados · 5 Molecules especificadas (sin construir) · 6 Organisms especificados (sin construir)
 
 ---
 
@@ -20,9 +20,9 @@ El design system de Capsule actualmente contiene **13 componentes atómicos** co
 
 **Estado del Design System:** 🟡 Fase Inicial
 
-- ✅ Atoms: 13/13 implementados
-- ⚠️ Molecules: 0 implementados
-- ⚠️ Organisms: 0 implementados
+- ✅ Atoms: 13/13 implementados — auditoría de julio 2026 confirma que son suficientes, no falta ningún primitivo.
+- ⚠️ Molecules: 0/5 implementadas (5 especificadas en palabras — ver [Molecules & Organisms](#molecules--organisms))
+- ⚠️ Organisms: 0/6 implementados (6 especificados en palabras, 3 de ellos ya nombrados en el spec de UX desde enero 2026 sin construir)
 
 ---
 
@@ -187,26 +187,30 @@ interface BadgeProps {
 **Descripción:**
 Botón primario de interacción con soporte para estados de carga y múltiples variantes visuales.
 
-**Props:**
+**Props (refactorizado julio 2026 — ver [Convención de variantes: Intent x Tone](#convención-de-variantes-intent-x-tone-julio-2026)):**
 
 ```typescript
 interface ButtonProps {
   isLoading?: boolean; // Estado de carga
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  intent?: "primary" | "neutral" | "danger"; // Significado semántico
+  tone?: "solid" | "outline" | "ghost" | "text"; // Tratamiento visual
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean; // Ancho completo
   // + todas las props de HTMLButtonElement
 }
 ```
 
-**Variantes:**
+**Variantes (estado actual — 12 combinaciones vía `compoundVariants`):**
 
-- **variant:**
-  - primary: Azul primario, acción principal [DEFAULT]
-  - secondary: Color acento, acción secundaria
-  - outline: Solo borde, fondo transparente
-  - ghost: Sin borde ni fondo, solo texto
-  - danger: Rojo, acciones destructivas
+- **intent:**
+  - primary: Authority Blue [DEFAULT]
+  - neutral: Greige oscuro/ink, para acciones sin carga emocional (ej. "Cancelar")
+  - danger: Rust apagado (`error` token), acciones destructivas
+- **tone:**
+  - solid: New Neumorphism — `shadow-studio` + borde de precisión + relleno de color [DEFAULT]. Mapea a "Primary/Deploy" del spec de UX.
+  - outline: Borde de precisión de 1px, fondo transparente
+  - ghost: Glassmorphism real — `backdrop-blur-md` + fondo translúcido. Mapea a "Secondary/Choice" del spec de UX.
+  - text: Sin chrome, `font-light`, tracking expandido. Mapea a "Tertiary/Support" del spec de UX.
 - **size:**
   - sm: h-9 px-3 text-sm
   - md: h-11 px-6 text-base [DEFAULT]
@@ -231,8 +235,9 @@ interface ButtonProps {
 
 ```tsx
 <Button>Guardar</Button>
-<Button variant="danger" size="lg">Eliminar</Button>
-<Button variant="outline" fullWidth>Cancelar</Button>
+<Button intent="danger" size="lg">Eliminar</Button>
+<Button tone="outline" fullWidth>Cancelar</Button>
+<Button intent="danger" tone="ghost">Eliminar (bajo énfasis)</Button>
 <Button isLoading>Procesando...</Button>
 ```
 
@@ -782,6 +787,22 @@ interface TagProps {
 
 ## Análisis de Patrones y Consistencia
 
+### Convención de variantes: Intent x Tone (julio 2026)
+
+**Hallazgo:** `Badge` y `Tag` ya separan dos ejes independientes — `variant` (solid/outline/subtle, el _tratamiento visual_) y `colorScheme` (primary/success/warning/error/..., el _significado semántico_) — combinándolos con `compoundVariants` de CVA. `Button` es el único átomo interactivo que **no sigue ese patrón**: mete ambas cosas en un solo enum plano (`primary | secondary | outline | ghost | danger`), lo que genera dos problemas concretos:
+
+1. **Combinaciones imposibles de expresar:** no existe forma de pedir un botón "danger" con tratamiento ghost (ej. "Eliminar prenda" de bajo énfasis) sin agregar una variante nueva a mano por cada combinación.
+2. **No mapea 1:1 con el spec de UX:** "Button Hierarchy (Tactile Luxury)" define 3 niveles — Primary (Deploy), Secondary (Choice, ghost+blur), Tertiary (Support, texto) — pero el código tiene 5 variantes que no corresponden claramente a esos 3 niveles. `secondary` (color acento sólido) no aparece en ningún flujo documentado.
+
+**Regla para este componente y los siguientes (`FormField`, `StatTile`, etc. incluidos):**
+
+- **`intent`** — el significado semántico. Para Button: `primary` (Authority Blue) · `neutral` (acciones sin carga emocional, ej. "Cancelar") · `danger` (Deep Error/destructivo). No se incluye `secondary`/accento como intent propio salvo que aparezca un caso de uso real.
+- **`tone`** — el tratamiento visual, independiente del color. Para Button: `solid` (New Neumorphism, emboss) · `outline` (borde de precisión 1px, fondo transparente) · `ghost` (Glassmorphism, `backdrop-blur`) · `text` (Tertiary, sin chrome).
+
+Con esto, la jerarquía del spec de UX se expresa como combinaciones concretas: Primary/Deploy = `intent="primary" tone="solid"`; Secondary/Choice = `intent="primary" tone="ghost"`; Tertiary/Support = `tone="text"` (cualquier intent); un "Eliminar" de bajo énfasis = `intent="danger" tone="text"`.
+
+**Estado: implementado (20 de julio de 2026).** `Button.tsx` fue refactorizado a `intent` ("primary" | "neutral" | "danger") x `tone` ("solid" | "outline" | "ghost" | "text"), combinados con `compoundVariants` de CVA — igual que `Badge`/`Tag`. El antiguo `variant="secondary"` (accento sólido) se eliminó por completo: no tenía caso de uso documentado y no había ningún consumidor real en `apps/web`. Los 3 niveles del spec de UX ahora son combinaciones directas: Primary/Deploy = `tone="solid"`, Secondary/Choice = `tone="ghost"` (glassmorphism real, `backdrop-blur-md`), Tertiary/Support = `tone="text"`. `IconButton` ya seguía un patrón equivalente (`variant` x `colorScheme`) y solo recibió el tratamiento de sombra/borde, sin cambio de API. 474 tests, `tsc` y `eslint` en verde tras el cambio. Todo componente nuevo (`FormField`, `StatTile`, `SearchBar`, etc.) debe nacer siguiendo `intent` x `tone` desde el inicio en vez de un enum plano.
+
 ### ✅ Patrones Comunes Implementados
 
 **1. Class Variance Authority (CVA)**
@@ -909,26 +930,28 @@ interface TagProps {
 
 ## Gaps y Oportunidades
 
-### 🚧 Componentes Faltantes (Sugeridos)
+## Molecules & Organisms
 
-**Molecules (Próximo Nivel):**
+> Auditoría de julio 2026: mapeo de los 13 átomos actuales contra los flujos de las Épicas 2-6 ([epics.md](../_bmad-output/planning-artifacts/epics.md)). Conclusión: **los 13 átomos alcanzan** — no falta ningún primitivo. Lo que falta es la capa intermedia; hoy cada feature compone sus propios átomos desde cero. Especificación en palabras, sin código todavía — construir antes de continuar con las historias de Épica 2 en adelante.
 
-- FormField (Input + Label + Error)
-- Card (Container estructurado)
-- Toast/Alert (Notificaciones)
-- Dropdown Menu
-- Modal/Dialog
-- Tooltip
-- Tabs
-- Accordion
+### Molecules
 
-**Organisms:**
+1. **FormField** — `Input`/`Checkbox`/`Radio`/`Switch` + label + mensaje de error/hint. Estados: default, focused, error, disabled. Usado transversalmente en toda captura de datos (Auth de Épica 1, Onboarding de Épica 2, Settings de Épica 6). Hoy cada formulario repite su propio wrapper de label + error a mano.
+2. **AssetCard** — `SquircleBox`(elevated) + imagen (con `Skeleton` mientras carga) + `Tag`(estado Limpio/Sucio) + `Badge`(categoría) + `IconButton`(editar/eliminar). Estados: loading (shimmer), normal, seleccionado, "ghost" (ítem sugerido no poseído: opacidad reducida + borde punteado). Épica 3 (Stories 3.1 y 3.3) y Épica 4.6 (Ghost Items).
+3. **StatTile** — número grande (JetBrains Mono) + label (Inter Light) + ícono opcional + indicador de tendencia. Épica 3.4 (Asset Counter & Value Stats).
+4. **InlineEditableTag** — `Tag` que activa un `Input` superpuesto al tap. Es el mecanismo concreto detrás de "Zero-Modal Correction" ya descrito en el spec de UX. Épica 2.3 (1-Tap Correction Interface).
+5. **SearchBar** — `Input`(leftIcon=Search) + `IconButton`(clear, condicional) + debounce de estado. Épica 3.2 (Filtrado instantáneo).
 
-- Form completo con validación
-- Navigation Bar
-- Sidebar
-- Data Table
-- Card Grid
+### Organisms
+
+1. **AssetGrid** — grid virtualizado de `AssetCard`, con grid de `Skeleton` mientras carga y estado vacío. Épica 3.1 (Visual Inventory Grid).
+2. **ContextFlowStepper** — wizard multi-paso (clima/evento) sobre `Divider` + `Button` + `Radio`/`Tag` de selección rápida. Ya nombrado en el spec de UX (Sprint 2), nunca construido. Épica 4.1.
+3. **LogicScoreIndicator** — `conic-gradient` + tap-to-expand con breakdown de razones (cada una un `Tag`/`Badge`). Ya nombrado en el spec de UX, nunca construido. Épica 4.3-4.4.
+4. **RefactorDiffView** — comparador lado a lado de dos `AssetCard` con "Luz de Precisión" resaltando cambios. Ya nombrado en el spec de UX, nunca construido. Épica 4.4.
+5. **BottomActionSheet** — contenedor deslizable (spring physics) para acciones primarias/secundarias. Ya nombrado en el spec de UX (Sprint 2) pero se usa en más flujos de los que el roadmap original cubría: Deploy (4.5), swipe actions (Épica 5), overlays de Épica 6.
+6. **SwipeDeck** — organismo tipo Tinder sobre `AssetCard`, con gestos de swipe y conversión "I Have It". Épica 5.1-5.2. No estaba nombrado en ningún documento anterior.
+
+Dirección visual de todo lo anterior (New Neumorphism selectivo + Glassmorphism + squircle nativo): ver [ux-design-specification.md § Material Direction Refinement](../_bmad-output/planning-artifacts/ux-design-specification.md#material-direction-refinement-2026-update).
 
 ### ⚠️ Mejoras Potenciales
 
@@ -1050,8 +1073,8 @@ import "@capsule/ui/styles/globals.css";
 
 El design system de Capsule tiene una **base sólida de 13 componentes atómicos** bien diseñados y consistentes. Los patrones implementados (CVA, forwardRef, TypeScript, testing) son excelentes y escalables.
 
-**Estado Actual:** 🟢 Atoms completados y robustos
-**Próximo Paso:** 🟡 Construir Molecules componiendo Atoms
-**Visión:** 🔵 Organismo completos para features end-to-end
+**Estado Actual:** 🟢 Atoms completados y robustos (suficientes, confirmado julio 2026)
+**Próximo Paso:** 🟡 Construir las 5 Molecules y 6 Organisms especificados en [Molecules & Organisms](#molecules--organisms) — antes de retomar las historias de Épica 2 en adelante
+**Visión:** 🔵 Organismos completos para features end-to-end
 
 El proyecto está listo para escalar al siguiente nivel de Atomic Design.

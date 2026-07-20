@@ -40,33 +40,37 @@ export default {
           950: '#1D2722',
         },
         'terra-cotta': {
-          DEFAULT: '#C67A5C',
-          50: '#FDF6F3',
-          100: '#FAEBE4',
-          200: '#F5D7C9',
-          300: '#EEBCA3',
-          400: '#E19A76',
-          500: '#C67A5C',
-          600: '#B8654A',
-          700: '#9A4F3C',
-          800: '#7E4336',
-          900: '#683A2F',
-          950: '#381D18',
+          // Base corrected to #C47C5D — the exact value in
+          // _bmad-output/design-tokens.json (was #C67A5C, a small drift).
+          DEFAULT: '#C47C5D',
+          50: '#FCF3EF',
+          100: '#F8E4DA',
+          200: '#F0C9B3',
+          300: '#E5A88A',
+          400: '#D68E6E',
+          500: '#C47C5D',
+          600: '#AD684C',
+          700: '#8F543D',
+          800: '#714331',
+          900: '#593428',
+          950: '#331D16',
         },
 
-        // Neutral - Grays (for text and borders)
+        // Neutral - warm Greige scale (Premium Studio), not cool gray.
+        // Anchored on canvas/surface at the light end (bone/greige) and
+        // text.primary at the dark end — see design-tokens.json.
         neutral: {
-          50: '#FAFAFA',
-          100: '#F5F5F5',
-          200: '#E5E5E5',
-          300: '#D4D4D4',
-          400: '#A3A3A3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
-          950: '#0A0A0A',
+          50: '#FDFCFB', // Bone / Base Canvas
+          100: '#F7F5F2', // Greige / Surface
+          200: '#EDE9E3',
+          300: '#DDD6CB',
+          400: '#B6AC9C',
+          500: '#8C8273',
+          600: '#6B6355',
+          700: '#4F493F',
+          800: '#332F29',
+          900: '#211E1A',
+          950: '#17140F',
         },
 
         // Compatibility aliases for existing atoms (maps to Premium Studio)
@@ -85,17 +89,17 @@ export default {
           950: '#171F28',
         },
         accent: {
-          50: '#FDF6F3',
-          100: '#FAEBE4',
-          200: '#F5D7C9',
-          300: '#EEBCA3',
-          400: '#E19A76',
-          500: '#C67A5C', // terra-cotta
-          600: '#B8654A',
-          700: '#9A4F3C',
-          800: '#7E4336',
-          900: '#683A2F',
-          950: '#381D18',
+          50: '#FCF3EF',
+          100: '#F8E4DA',
+          200: '#F0C9B3',
+          300: '#E5A88A',
+          400: '#D68E6E',
+          500: '#C47C5D', // terra-cotta
+          600: '#AD684C',
+          700: '#8F543D',
+          800: '#714331',
+          900: '#593428',
+          950: '#331D16',
         },
 
         // Semantic aliases (full scale for atom compatibility)
@@ -109,22 +113,29 @@ export default {
           800: '#2F433A',
         },
         warning: {
-          DEFAULT: '#C67A5C',
-          50: '#FDF6F3',
-          100: '#FAEBE4',
-          500: '#C67A5C',
-          600: '#B8654A',
-          700: '#9A4F3C',
-          800: '#7E4336',
+          // Shares the terracotta family — spec avoids harsh amber/red for
+          // logical warnings (weather, duplicates).
+          DEFAULT: '#C47C5D',
+          50: '#FCF3EF',
+          100: '#F8E4DA',
+          500: '#C47C5D',
+          600: '#AD684C',
+          700: '#8F543D',
+          800: '#714331',
         },
         error: {
-          DEFAULT: '#B91C1C',
-          50: '#FEF2F2',
-          100: '#FEE2E2',
-          500: '#B91C1C',
-          600: '#991B1B',
-          700: '#7F1D1D',
-          800: '#661B1B',
+          // Not defined in design-tokens.json — derived as a muted rust so
+          // destructive actions stay in the warm/greige world instead of a
+          // stock, jarring red. See ux-design-specification.md "Material
+          // Direction Refinement" and the Button variant audit in
+          // docs/ui-component-inventory.md.
+          DEFAULT: '#8F4433',
+          50: '#FBF0ED',
+          100: '#F5DED7',
+          500: '#8F4433',
+          600: '#78392A',
+          700: '#602D22',
+          800: '#4A2319',
         },
         info: {
           DEFAULT: '#3E5C76',
@@ -181,6 +192,10 @@ export default {
         'studio-sm': '0 2px 4px 0 rgb(62 92 118 / 0.06)',
         'studio': '0 4px 8px 0 rgb(62 92 118 / 0.08)',
         'studio-lg': '0 8px 16px 0 rgb(62 92 118 / 0.10)',
+        // Exact value from _bmad-output/design-tokens.json effects.shadows["ambient-occlusion"]
+        'ambient': '0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 10px -2px rgba(0, 0, 0, 0.02)',
+        // Recessed/inset treatment for inputs — material "receiving" vs buttons "giving"
+        'inset-soft': 'inset 0 1px 3px 0 rgb(62 92 118 / 0.08)',
       },
       // Linen Grid - 8px base spacing
       spacing: {

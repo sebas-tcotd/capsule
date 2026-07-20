@@ -8,6 +8,10 @@ const inputVariants = cva(
   // Base styles
   [
     "w-full squircle rounded-xl border transition-colors",
+    // Recessed/inset treatment — an input receives information rather than
+    // offering an action, so it reads as pressed into the material instead
+    // of raised off it (contrast with Button's shadow-studio emboss).
+    "shadow-inset-soft",
     "placeholder:text-neutral-400",
     "focus:outline-none focus:ring-2 focus:ring-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-neutral-50",
@@ -21,7 +25,7 @@ const inputVariants = cva(
       },
       variant: {
         default: [
-          "border-neutral-300 bg-white text-neutral-900",
+          "border-neutral-300 bg-surface text-neutral-900",
           "hover:border-neutral-400",
           "focus:border-primary-500 focus:ring-primary-500",
         ],
