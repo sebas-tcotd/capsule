@@ -2,14 +2,6 @@ import type { Preview } from "@storybook/react-vite";
 import "../src/input.css";
 import "../src/fonts.css";
 
-// Register Squircle Paint Worklet
-if (typeof window !== "undefined" && "paintWorklet" in CSS) {
-  // @ts-ignore
-  CSS.paintWorklet.addModule("/worklets/squircle.js").catch((err) => {
-    console.warn("Failed to load squircle worklet in Storybook:", err);
-  });
-}
-
 const preview: Preview = {
   parameters: {
     controls: {

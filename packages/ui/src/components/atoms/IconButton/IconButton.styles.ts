@@ -31,31 +31,32 @@ export const iconButtonVariants = cva(
       },
     },
     compoundVariants: [
-      // Solid variants — selective New Neumorphism (shadow-studio + precision
-      // border), same treatment as Button's solid variants.
+      // Solid variants — selective New Neumorphism: light-to-base gradient +
+      // precision border + a layered shadow (inset top highlight + two
+      // intent-tinted outer shadows), same treatment as Button's solid tone.
       {
         variant: "solid",
         colorScheme: "primary",
         className:
-          "bg-primary-500 text-white hover:bg-primary-600 border border-primary-700 shadow-studio focus-visible:ring-primary-500",
+          "bg-gradient-to-b from-primary-400 to-primary-500 text-white hover:from-primary-500 hover:to-primary-600 border border-primary-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(44,67,86,0.4),0_2px_6px_-1px_rgba(44,67,86,0.4)] focus-visible:ring-primary-500",
       },
       {
         variant: "solid",
         colorScheme: "accent",
         className:
-          "bg-accent-500 text-white hover:bg-accent-600 border border-accent-700 shadow-studio focus-visible:ring-accent-500",
+          "bg-gradient-to-b from-accent-400 to-accent-500 text-white hover:from-accent-500 hover:to-accent-600 border border-accent-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(143,84,61,0.4),0_2px_6px_-1px_rgba(143,84,61,0.4)] focus-visible:ring-accent-500",
       },
       {
         variant: "solid",
         colorScheme: "error",
         className:
-          "bg-error-500 text-white hover:bg-error-600 border border-error-700 shadow-studio focus-visible:ring-error-500",
+          "bg-gradient-to-b from-error-400 to-error-500 text-white hover:from-error-500 hover:to-error-600 border border-error-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(96,45,34,0.4),0_2px_6px_-1px_rgba(96,45,34,0.4)] focus-visible:ring-error-500",
       },
       {
         variant: "solid",
         colorScheme: "neutral",
         className:
-          "bg-neutral-500 text-white hover:bg-neutral-600 border border-neutral-700 shadow-studio focus-visible:ring-neutral-500",
+          "bg-gradient-to-b from-neutral-400 to-neutral-500 text-white hover:from-neutral-500 hover:to-neutral-600 border border-neutral-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(79,73,63,0.35),0_2px_6px_-1px_rgba(79,73,63,0.35)] focus-visible:ring-neutral-500",
       },
       // Outline variants
       {

@@ -76,23 +76,27 @@
   }
 
   /* Squircle - Continuous curvature (superellipse) effect
-   * Uses mask-image with a superellipse SVG for smooth corners
-   * Fallback to standard border-radius for unsupported browsers
+   * Native corner-shape (CSS Borders and Box Decorations Module Level 4) —
+   * see docs/decisions/0002-native-corner-shape-squircle.md. Chromium
+   * renders it natively; Safari/Firefox ignore it per spec, falling back to
+   * the element's own rounded-* utility class. No JS registration needed —
+   * the previous Houdini paint(squircle) approach required a worklet to be
+   * registered by the CONSUMING app (CSS.paintWorklet.addModule), which
+   * silently made every squircle element invisible in any context that
+   * didn't replicate that registration (confirmed while syncing this design
+   * system to Claude Design — see NOTES.md).
    */
   .squircle {
-    --squircle-smooth: 4; /* Smoothness factor for superellipse */
-    /* The mask creates a true squircle shape */
-    mask-image: paint(squircle);
-    -webkit-mask-image: paint(squircle);
-    /* Ensure background clips to the mask */
-    background-clip: padding-box;
+    corner-shape: squircle;
   }
 
-  /* For browsers without Houdini paint support, we get graceful degradation */
-  @supports not (mask-image: paint(squircle)) {
-    .squircle {
-      /* Fallback relies on the element having a rounded-* utility class */
-      /* No forced border-radius here to allow flexibility */
-    }
+  /* corner-shape doesn't cleanly degenerate to a sharp corner at
+   * border-radius: 0 in Chromium's implementation — a squircle-classed
+   * element forced to rounded-none (e.g. the inner segments of a joined
+   * ButtonGroup) still paints a visible curve. Reset explicitly whenever
+   * both classes land on the same element.
+   */
+  .squircle.rounded-none {
+    corner-shape: round;
   }
 }

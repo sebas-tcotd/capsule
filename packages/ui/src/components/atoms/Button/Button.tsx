@@ -17,8 +17,11 @@ const buttonVariants = cva(
   // Base styles
   [
     "inline-flex items-center justify-center gap-2",
-    "squircle rounded-xl font-medium transition-all",
-    "active:scale-[0.98]", // Soft Scale Feedback — see ux-design-specification.md "Material Direction Refinement"
+    "squircle rounded-xl font-medium",
+    // Spring physics, not a linear ease — see ux-design-specification.md
+    // "Material Direction Refinement" / "Soft Scale Feedback".
+    "transition-[transform,box-shadow,background-color,border-color,color] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+    "active:scale-[0.98]",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
     "cursor-auto",
@@ -47,24 +50,29 @@ const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      // ---- Solid: selective New Neumorphism (shadow-studio + precision border) ----
+      // ---- Solid: selective New Neumorphism — light-to-base gradient (not a
+      // flat fill), a 1px precision border, and a layered shadow (an inset
+      // top highlight for the glossy catch-light + two outer shadows tinted
+      // with the intent's own deep shade, not flat black). Mirrors the
+      // reference preview's `.tone-solid` exactly — see
+      // premium-studio-preview.html / docs/decisions/0002. ----
       {
         intent: "primary",
         tone: "solid",
         className:
-          "bg-primary-500 text-white hover:bg-primary-600 border border-primary-700 shadow-studio focus-visible:ring-primary-500",
+          "bg-gradient-to-b from-primary-400 to-primary-500 text-white hover:from-primary-500 hover:to-primary-600 border border-primary-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(44,67,86,0.4),0_2px_6px_-1px_rgba(44,67,86,0.4)] focus-visible:ring-primary-500",
       },
       {
         intent: "neutral",
         tone: "solid",
         className:
-          "bg-neutral-700 text-white hover:bg-neutral-800 border border-neutral-800 shadow-studio focus-visible:ring-neutral-500",
+          "bg-gradient-to-b from-neutral-600 to-neutral-700 text-white hover:from-neutral-700 hover:to-neutral-800 border border-neutral-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(51,47,41,0.35),0_2px_6px_-1px_rgba(51,47,41,0.35)] focus-visible:ring-neutral-500",
       },
       {
         intent: "danger",
         tone: "solid",
         className:
-          "bg-error-500 text-white hover:bg-error-600 border border-error-700 shadow-studio focus-visible:ring-error-500",
+          "bg-gradient-to-b from-error-400 to-error-500 text-white hover:from-error-500 hover:to-error-600 border border-error-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_8px_16px_-8px_rgba(96,45,34,0.4),0_2px_6px_-1px_rgba(96,45,34,0.4)] focus-visible:ring-error-500",
       },
 
       // ---- Outline: 1px precision border, no fill ----
@@ -87,24 +95,26 @@ const buttonVariants = cva(
           "border border-error-500 text-error-600 bg-transparent hover:bg-error-50 focus-visible:ring-error-500",
       },
 
-      // ---- Ghost: Glassmorphism (translucent + backdrop-blur) ----
+      // ---- Ghost: Glassmorphism (translucent + backdrop-blur) — plus the
+      // soft ambient shadow the reference preview gives it (a glass surface
+      // still casts a little depth, it isn't perfectly flat against the page). ----
       {
         intent: "primary",
         tone: "ghost",
         className:
-          "text-primary-700 bg-primary-50/60 backdrop-blur-md border border-primary-500/20 hover:bg-primary-50/80 focus-visible:ring-primary-500",
+          "text-primary-700 bg-primary-50/60 backdrop-blur-md border border-primary-500/20 shadow-[0_4px_14px_-6px_rgba(28,20,12,0.12)] hover:bg-primary-50/80 focus-visible:ring-primary-500",
       },
       {
         intent: "neutral",
         tone: "ghost",
         className:
-          "text-neutral-700 bg-white/50 backdrop-blur-md border border-neutral-300/40 hover:bg-white/70 focus-visible:ring-neutral-500",
+          "text-neutral-700 bg-white/50 backdrop-blur-md border border-neutral-300/40 shadow-[0_4px_14px_-6px_rgba(28,20,12,0.12)] hover:bg-white/70 focus-visible:ring-neutral-500",
       },
       {
         intent: "danger",
         tone: "ghost",
         className:
-          "text-error-700 bg-error-50/60 backdrop-blur-md border border-error-500/20 hover:bg-error-50/80 focus-visible:ring-error-500",
+          "text-error-700 bg-error-50/60 backdrop-blur-md border border-error-500/20 shadow-[0_4px_14px_-6px_rgba(28,20,12,0.12)] hover:bg-error-50/80 focus-visible:ring-error-500",
       },
 
       // ---- Text: Tertiary/Support — no chrome, light weight, wide tracking ----

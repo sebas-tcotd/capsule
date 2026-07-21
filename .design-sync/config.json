@@ -1,0 +1,16 @@
+{
+  "projectId": "c4c7d47a-245c-4b80-8828-6e6baa7025b4",
+  "shape": "storybook",
+  "storybookConfigDir": "apps/docs/.storybook",
+  "pkg": "@capsule/ui",
+  "globalName": "CapsuleUI",
+  "storybookStatic": ".design-sync/sb-reference",
+  "entry": "packages/ui/src/index.ts",
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "Button": { "cardMode": "column" },
+    "Divider": { "cardMode": "column" },
+    "Input": { "cardMode": "column" },
+    "Skeleton": { "cardMode": "column" }
+  }
+}

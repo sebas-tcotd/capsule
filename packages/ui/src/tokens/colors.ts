@@ -134,7 +134,7 @@ export const colors = {
 
   surface: {
     light: "#FFFFFF",
-    DEFAULT: "#F7F5F2", // Greige — matches SquircleBox "surface" variant
+    DEFAULT: "#F7F5F2", // Greige surface fill
     dark: "#EDE9E3",
   },
 

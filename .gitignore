@@ -101,3 +101,10 @@ _bmad/**/memory/
 
 # --- Private Documentation ---
 docs/internal/
+# --- Claude Design sync (design-sync skill) ---
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.ds-sync/
+ds-bundle/

@@ -157,22 +157,6 @@ export const FullWidth: Story = {
   ),
 };
 
-export const ButtonGroup: Story = {
-  render: () => (
-    <div className="inline-flex rounded-lg overflow-hidden border border-gray-300">
-      <Button tone="ghost" className="rounded-none border-r">
-        Left
-      </Button>
-      <Button tone="ghost" className="rounded-none border-r">
-        Center
-      </Button>
-      <Button tone="ghost" className="rounded-none">
-        Right
-      </Button>
-    </div>
-  ),
-};
-
 export const CommonActions: Story = {
   render: () => (
     <div className="flex flex-col gap-4">

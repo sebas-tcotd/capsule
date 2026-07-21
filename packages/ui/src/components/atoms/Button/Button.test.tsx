@@ -12,10 +12,17 @@ describe("Button", () => {
       expect(getByRole("button", { name: "Click me" })).toBeInTheDocument();
     });
 
-    it("renders with primary/solid intent+tone by default", () => {
+    it("renders with primary/solid intent+tone by default (gradient + layered shadow, not a flat fill)", () => {
       render(<Button data-testid="button">Primary</Button>);
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-primary-500", "shadow-studio");
+      expect(button).toHaveClass(
+        "bg-gradient-to-b",
+        "from-primary-400",
+        "to-primary-500",
+      );
+      expect(button.className).toContain(
+        "shadow-[inset_0_1px_0_rgba(255,255,255,0.16)",
+      );
     });
 
     it("renders neutral solid intent", () => {
@@ -25,7 +32,11 @@ describe("Button", () => {
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-neutral-700");
+      expect(button).toHaveClass(
+        "bg-gradient-to-b",
+        "from-neutral-600",
+        "to-neutral-700",
+      );
     });
 
     it("renders outline tone (precision border, no fill)", () => {
@@ -65,7 +76,11 @@ describe("Button", () => {
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-error-500");
+      expect(button).toHaveClass(
+        "bg-gradient-to-b",
+        "from-error-400",
+        "to-error-500",
+      );
     });
 
     it("renders danger intent with ghost tone (previously impossible with the old flat variant enum)", () => {
@@ -300,7 +315,7 @@ describe("Button", () => {
       );
       const button = screen.getByTestId("button");
       expect(button).toHaveClass("custom-class");
-      expect(button).toHaveClass("bg-primary-500"); // Still has intent/tone classes
+      expect(button).toHaveClass("to-primary-500"); // Still has intent/tone classes
     });
   });
 
@@ -404,7 +419,7 @@ describe("Button", () => {
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-primary-500", "h-9", "px-3");
+      expect(button).toHaveClass("to-primary-500", "h-9", "px-3");
     });
 
     it("renders large danger/solid button", () => {
@@ -414,7 +429,7 @@ describe("Button", () => {
         </Button>,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-error-500", "h-14", "px-8");
+      expect(button).toHaveClass("to-error-500", "h-14", "px-8");
     });
 
     it("renders full width outline button", () => {

@@ -102,15 +102,24 @@ export default {
           950: '#331D16',
         },
 
-        // Semantic aliases (full scale for atom compatibility)
+        // Semantic aliases (FULL scale — a partial ramp here silently breaks
+        // any utility referencing a missing shade, e.g. `from-error-400` in
+        // a gradient generates nothing and the gradient renders transparent
+        // with no error. Always keep these complete, mirroring the base
+        // family above.)
         success: {
           DEFAULT: '#4A6D5E',
           50: '#F0F5F2',
           100: '#E1EBE6',
+          200: '#C3D7CD',
+          300: '#A5C3B4',
+          400: '#78A08A',
           500: '#4A6D5E',
           600: '#415F52',
           700: '#385146',
           800: '#2F433A',
+          900: '#26352E',
+          950: '#1D2722',
         },
         warning: {
           // Shares the terracotta family — spec avoids harsh amber/red for
@@ -118,10 +127,15 @@ export default {
           DEFAULT: '#C47C5D',
           50: '#FCF3EF',
           100: '#F8E4DA',
+          200: '#F0C9B3',
+          300: '#E5A88A',
+          400: '#D68E6E',
           500: '#C47C5D',
           600: '#AD684C',
           700: '#8F543D',
           800: '#714331',
+          900: '#593428',
+          950: '#331D16',
         },
         error: {
           // Not defined in design-tokens.json — derived as a muted rust so
@@ -132,19 +146,29 @@ export default {
           DEFAULT: '#8F4433',
           50: '#FBF0ED',
           100: '#F5DED7',
+          200: '#E9BAAC',
+          300: '#DA9481',
+          400: '#B3684F',
           500: '#8F4433',
           600: '#78392A',
           700: '#602D22',
           800: '#4A2319',
+          900: '#351911',
+          950: '#200E0A',
         },
         info: {
           DEFAULT: '#3E5C76',
           50: '#EEF2F5',
           100: '#DDE5EB',
+          200: '#BBCBD7',
+          300: '#99B1C3',
+          400: '#6C8BA0',
           500: '#3E5C76',
           600: '#374F66',
           700: '#2F4356',
           800: '#273746',
+          900: '#1F2B36',
+          950: '#171F28',
         },
       },
       fontFamily: {

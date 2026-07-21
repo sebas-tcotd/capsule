@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SquircleRegistry } from "../components/SquircleRegistry";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -32,7 +31,6 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans`}
       >
-        <SquircleRegistry />
         {children}
       </body>
     </html>

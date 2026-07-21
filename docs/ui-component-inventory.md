@@ -933,11 +933,13 @@ Con esto, la jerarquía del spec de UX se expresa como combinaciones concretas: 
 ## Molecules & Organisms
 
 > Auditoría de julio 2026: mapeo de los 13 átomos actuales contra los flujos de las Épicas 2-6 ([epics.md](../_bmad-output/planning-artifacts/epics.md)). Conclusión: **los 13 átomos alcanzan** — no falta ningún primitivo. Lo que falta es la capa intermedia; hoy cada feature compone sus propios átomos desde cero. Especificación en palabras, sin código todavía — construir antes de continuar con las historias de Épica 2 en adelante.
+>
+> **Actualización:** existía un 14° átomo no documentado aquí, `SquircleBox`, cuyo único propósito era aplicar la curvatura squircle a cualquier superficie. Con `corner-shape: squircle` ya como clase base (`packages/tailwind-config/base.css`), el componente quedó redundante y se eliminó — cualquier `div` puede usar `squircle rounded-*` directamente. Los 13 átomos documentados no cambian.
 
 ### Molecules
 
 1. **FormField** — `Input`/`Checkbox`/`Radio`/`Switch` + label + mensaje de error/hint. Estados: default, focused, error, disabled. Usado transversalmente en toda captura de datos (Auth de Épica 1, Onboarding de Épica 2, Settings de Épica 6). Hoy cada formulario repite su propio wrapper de label + error a mano.
-2. **AssetCard** — `SquircleBox`(elevated) + imagen (con `Skeleton` mientras carga) + `Tag`(estado Limpio/Sucio) + `Badge`(categoría) + `IconButton`(editar/eliminar). Estados: loading (shimmer), normal, seleccionado, "ghost" (ítem sugerido no poseído: opacidad reducida + borde punteado). Épica 3 (Stories 3.1 y 3.3) y Épica 4.6 (Ghost Items).
+2. **AssetCard** — contenedor `squircle rounded-2xl shadow-studio` (CSS nativo, sin componente wrapper — ver nota de julio 2026 más abajo) + imagen (con `Skeleton` mientras carga) + `Tag`(estado Limpio/Sucio) + `Badge`(categoría) + `IconButton`(editar/eliminar). Estados: loading (shimmer), normal, seleccionado, "ghost" (ítem sugerido no poseído: opacidad reducida + borde punteado). Épica 3 (Stories 3.1 y 3.3) y Épica 4.6 (Ghost Items).
 3. **StatTile** — número grande (JetBrains Mono) + label (Inter Light) + ícono opcional + indicador de tendencia. Épica 3.4 (Asset Counter & Value Stats).
 4. **InlineEditableTag** — `Tag` que activa un `Input` superpuesto al tap. Es el mecanismo concreto detrás de "Zero-Modal Correction" ya descrito en el spec de UX. Épica 2.3 (1-Tap Correction Interface).
 5. **SearchBar** — `Input`(leftIcon=Search) + `IconButton`(clear, condicional) + debounce de estado. Épica 3.2 (Filtrado instantáneo).

@@ -26,7 +26,7 @@ describe("IconButton", () => {
         <IconButton icon={<X />} aria-label="Close" data-testid="button" />,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-primary-500");
+      expect(button).toHaveClass("to-primary-500");
     });
 
     it("renders with outline variant", () => {
@@ -62,7 +62,7 @@ describe("IconButton", () => {
         <IconButton icon={<X />} aria-label="Close" data-testid="button" />,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-primary-500");
+      expect(button).toHaveClass("to-primary-500");
     });
 
     it("renders with accent colorScheme", () => {
@@ -75,7 +75,7 @@ describe("IconButton", () => {
         />,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-accent-500");
+      expect(button).toHaveClass("to-accent-500");
     });
 
     it("renders with error colorScheme", () => {
@@ -88,7 +88,7 @@ describe("IconButton", () => {
         />,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-error-500");
+      expect(button).toHaveClass("to-error-500");
     });
 
     it("renders with neutral colorScheme", () => {
@@ -101,7 +101,7 @@ describe("IconButton", () => {
         />,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("bg-neutral-500");
+      expect(button).toHaveClass("to-neutral-500");
     });
   });
 
@@ -286,7 +286,7 @@ describe("IconButton", () => {
       );
       const button = screen.getByTestId("button");
       expect(button).toHaveClass("custom-class");
-      expect(button).toHaveClass("bg-primary-500");
+      expect(button).toHaveClass("to-primary-500");
     });
   });
 
@@ -362,7 +362,7 @@ describe("IconButton", () => {
         />,
       );
       const button = screen.getByTestId("button");
-      expect(button).toHaveClass("h-8", "w-8", "bg-primary-500");
+      expect(button).toHaveClass("h-8", "w-8", "to-primary-500");
     });
 
     it("renders large outline accent button", () => {
